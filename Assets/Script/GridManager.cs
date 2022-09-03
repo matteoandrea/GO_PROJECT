@@ -6,12 +6,12 @@ namespace Assets.Script
 {
     public class GridManager : MonoBehaviour
     {
-        public List<Tile> tiles;
+        public List<Path> paths;
 
         [SerializeField]
         private TextAsset _levelBuild;
         [SerializeField]
-        private Tile _tilePrefab;
+        private Path _tilePrefab;
         [SerializeField]
         private float _distance;
         private int[] _map;
@@ -32,31 +32,39 @@ namespace Assets.Script
                 var column = Array.ConvertAll(row[x].Split(new string[] { "," }, StringSplitOptions.None), int.Parse);
                 for (int y = 0; y < column.Length; y++)
                 {
-                    if (column[y] != 1) continue;
+                    switch (column[y])
+                    {
+                        case 0:
+                            continue;
+                        default:
+                            break;
+                    }
 
-                    var tile = (Instantiate(_tilePrefab, new Vector3(y * _distance, 0, x * _distance), Quaternion.identity));
+                    var pos = new Vector3(transform.position.x + _distance * -x, transform.position.y, transform.position.z + _distance * y);
+                    var tile = Instantiate(_tilePrefab, pos, Quaternion.identity);
+                    tile.transform.parent = this.transform;
                     tile.Initit(x, y);
-                    tiles.Add(tile);
+                    paths.Add(tile);
                 }
             }
         }
 
         private void BuildConnections()
         {
-            for (int i = 0; i < tiles.Count; i++)
+            for (int i = 0; i < paths.Count; i++)
             {
-                for (int j = 0; j < tiles.Count; j++)
+                for (int j = 0; j < paths.Count; j++)
                 {
-                    var x1 = tiles[i].location[0];
-                    var y1 = tiles[i].location[1];
+                    var x1 = paths[i].location[0];
+                    var y1 = paths[i].location[1];
 
-                    var x2 = tiles[j].location[0];
-                    var y2 = tiles[j].location[1];
+                    var x2 = paths[j].location[0];
+                    var y2 = paths[j].location[1];
 
-                    if (x2 == x1 + 1 && y2 == y1) tiles[i].directions[0] = tiles[j];
-                    else if (x2 == x1 && y2 == y1 + 1) tiles[i].directions[1] = tiles[j];
-                    else if (x2 == x1 - 1 && y2 == y1) tiles[i].directions[2] = tiles[j];
-                    else if (x2 == x1 && y2 == y1 - 1) tiles[i].directions[3] = tiles[j];
+                    if (x2 == x1 + 1 && y2 == y1) paths[i].directions[0] = paths[j];
+                    else if (x2 == x1 && y2 == y1 + 1) paths[i].directions[1] = paths[j];
+                    else if (x2 == x1 - 1 && y2 == y1) paths[i].directions[2] = paths[j];
+                    else if (x2 == x1 && y2 == y1 - 1) paths[i].directions[3] = paths[j];
                 }
             }
         }
