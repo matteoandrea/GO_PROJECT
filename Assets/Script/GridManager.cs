@@ -1,30 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
-using Newtonsoft.Json.Linq;
 
 namespace Assets.Script
 {
     public class GridManager : MonoBehaviour
     {
+        public List<Tile> tiles;
+
         [SerializeField]
         private TextAsset _levelBuild;
-
         [SerializeField]
         private Tile _tilePrefab;
-
         [SerializeField]
         private float _distance;
-
         private int[] _map;
-        [SerializeField]
-        private List<Tile> _tiles;
-
 
         private void Start()
         {
             GenerateGrid();
+            BuildConnections();
         }
 
         private void GenerateGrid()
@@ -40,8 +35,28 @@ namespace Assets.Script
                     if (column[y] != 1) continue;
 
                     var tile = (Instantiate(_tilePrefab, new Vector3(y * _distance, 0, x * _distance), Quaternion.identity));
-                    tile.name = x + "," + y;
-                    _tiles.Add(tile);
+                    tile.Initit(x, y);
+                    tiles.Add(tile);
+                }
+            }
+        }
+
+        private void BuildConnections()
+        {
+            for (int i = 0; i < tiles.Count; i++)
+            {
+                for (int j = 0; j < tiles.Count; j++)
+                {
+                    var x1 = tiles[i].location[0];
+                    var y1 = tiles[i].location[1];
+
+                    var x2 = tiles[j].location[0];
+                    var y2 = tiles[j].location[1];
+
+                    if (x2 == x1 + 1 && y2 == y1) tiles[i].directions[0] = tiles[j];
+                    else if (x2 == x1 && y2 == y1 + 1) tiles[i].directions[1] = tiles[j];
+                    else if (x2 == x1 - 1 && y2 == y1) tiles[i].directions[2] = tiles[j];
+                    else if (x2 == x1 && y2 == y1 - 1) tiles[i].directions[3] = tiles[j];
                 }
             }
         }

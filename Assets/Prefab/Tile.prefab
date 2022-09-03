@@ -97,7 +97,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97cf2e636b7eb7d4a80be231f53960a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  directions: []
   light: {fileID: 5266455137633266139}
+  location: 
 --- !u!1 &5628483143248315193
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +140,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5628483143248315193}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 0
   m_Shape: 0
