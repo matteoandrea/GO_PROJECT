@@ -14,6 +14,8 @@ namespace Assets.Script
         [SerializeField] private VoidEventSO _finishEnemyTurn;
 
         [SerializeField] private Turn _turn = Turn.Player;
+
+
     }
 
     public enum Turn
