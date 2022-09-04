@@ -32,17 +32,10 @@ namespace Assets.Script
                 var column = Array.ConvertAll(row[x].Split(new string[] { "," }, StringSplitOptions.None), int.Parse);
                 for (int y = 0; y < column.Length; y++)
                 {
-                    switch (column[y])
-                    {
-                        case 0:
-                            continue;
-                        default:
-                            break;
-                    }
-
+                    if (column[y] == 0) continue;
                     var pos = new Vector3(transform.position.x + _distance * -x, transform.position.y, transform.position.z + _distance * y);
                     var tile = Instantiate(_tilePrefab, pos, Quaternion.identity);
-                    tile.transform.parent = this.transform;
+                    tile.transform.SetParent(this.transform);
                     tile.Initit(x, y);
                     paths.Add(tile);
                 }
@@ -61,10 +54,10 @@ namespace Assets.Script
                     var x2 = paths[j].location[0];
                     var y2 = paths[j].location[1];
 
-                    if (x2 == x1 + 1 && y2 == y1) paths[i].directions[0] = paths[j];
-                    else if (x2 == x1 && y2 == y1 + 1) paths[i].directions[1] = paths[j];
-                    else if (x2 == x1 - 1 && y2 == y1) paths[i].directions[2] = paths[j];
-                    else if (x2 == x1 && y2 == y1 - 1) paths[i].directions[3] = paths[j];
+                    if (x2 == x1 + 1 && y2 == y1) paths[i].CreateLink(paths[j].transform);
+                    else if (x2 == x1 && y2 == y1 + 1) paths[i].CreateLink(paths[j].transform);
+                    else if (x2 == x1 - 1 && y2 == y1) paths[i].CreateLink(paths[j].transform);
+                    else if (x2 == x1 && y2 == y1 - 1) paths[i].CreateLink(paths[j].transform);
                 }
             }
         }
