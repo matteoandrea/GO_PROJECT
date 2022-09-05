@@ -3,12 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
 using Assets.Script.Input;
+using Assets.Script.Events;
 
 namespace Assets.Script.Player
 {
     public class PlayerController : MonoBehaviour,ICommnad
     {
         [SerializeField] private InputReader _inputReader = default;
+        [SerializeField] private VoidEventSO playerMovedEvent;
 
         private Camera _camera;
         private NavMeshAgent _agent;
@@ -55,8 +57,8 @@ namespace Assets.Script.Player
             var link = _agent.nextOffMeshLinkData.endPos;
             NavMesh.CalculatePath(transform.position, link, NavMesh.AllAreas, path);
             _agent.SetPath(path);
-        }
 
-        
+            playerMovedEvent.OnEventRaised.Invoke();
+        }
     }
 }

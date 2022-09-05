@@ -60,7 +60,7 @@ namespace Assets.Script.Input
             mousePositionEvent.Invoke(context.ReadValue<Vector2>());
         }
 
-        private void DisableAll()
+        public void DisableAll()
         {
             _gameInput.Gameplay.Disable();
         }
