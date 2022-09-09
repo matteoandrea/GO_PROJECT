@@ -6,7 +6,7 @@ namespace Assets.Script.STM
 {
     public class WinState : State
     {
-        public WinState(StateMachine stateMachine) : base(stateMachine) { }
+        public WinState(StateMachine stateMachine) : base(stateMachine) => StateType = StateTypeEnum.WinState;
 
         public override IEnumerator OnEnterState()
         {

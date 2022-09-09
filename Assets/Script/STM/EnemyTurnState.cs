@@ -4,7 +4,7 @@ namespace Assets.Script.STM
 {
     public class EnemyTurnState : State
     {
-        public EnemyTurnState(StateMachine stateMachine) : base(stateMachine) { }
+        public EnemyTurnState(StateMachine stateMachine) : base(stateMachine) => StateType = StateTypeEnum.EnemyState;
 
     }
 }

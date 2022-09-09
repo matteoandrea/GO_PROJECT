@@ -6,6 +6,7 @@ namespace Assets.Script.STM.Core
     public abstract class State
     {
         protected StateMachine StateMachine;
+        public StateTypeEnum StateType;
 
         public State(StateMachine stateMachine) => StateMachine = stateMachine;
 
