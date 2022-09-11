@@ -4,13 +4,14 @@ using Assets.Script.STM.Core;
 using Assets.Script.Command;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Assets.Script.Manager
 {
     public class GameManager : StateMachine, IGameManager
     {
         [SerializeField] private InputReader _inputReader;
-        [SerializeField] private GameManagerProxy _proxy;
+        public GameManagerProxy _proxy;
 
         public Queue<ICommand> commandQueue;
 
@@ -24,6 +25,11 @@ namespace Assets.Script.Manager
         {
             SetState(new BeginState(this));
         }
+
+        public void InvokeOnStartPlayerTurn() => _proxy.OnStartPlayerTurn();
+
+        public void InvokeOnStartEnemyTurn() => _proxy.OnStartEnemyTurn();
+
 
         public void SetPlayerInput(bool e)
         {
@@ -51,7 +57,8 @@ namespace Assets.Script.Manager
                     commandQueue.Dequeue().Execute();
                 }
 
-                SetState(new PlayerTurnState(this));
+                if (State.StateType == StateTypeEnum.EnemyState)
+                    SetState(new PlayerTurnState(this));
             }
         }
     }

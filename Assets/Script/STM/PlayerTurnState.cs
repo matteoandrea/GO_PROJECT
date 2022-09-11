@@ -14,17 +14,11 @@ namespace Assets.Script.STM
         public override IEnumerator OnEnterState()
         {
             _manager = StateMachine.GetComponent<GameManager>();
+            _manager.InvokeOnStartPlayerTurn();
             _manager.SetPlayerInput(true);
 
-            //_manager.proxy.playerActionEvent += ProcessMove;
 
             return base.OnEnterState();
-        }
-
-        private void ProcessMove()
-        {
-            //_manager.proxy.playerActionEvent -= ProcessMove;
-            StateMachine.SetState(new EnemyTurnState(StateMachine));
         }
 
         public override IEnumerator OnExitState()

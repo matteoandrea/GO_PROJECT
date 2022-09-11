@@ -12,6 +12,12 @@ namespace Assets.Script.Manager
     {
         public GameManager GameManager { private get; set; }
 
+        public event UnityAction startPlayerTurnEvent;
+        public event UnityAction startEnemyTurnEvent;
+
         public void AddCommand(ICommand command) => GameManager.AddCommand(command);
+
+        public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
+        public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();
     }
 }
