@@ -10,5 +10,7 @@ namespace Assets.Script.A.GridLogic
         public Grid Grid { private get; set; }
 
         public List<Node> GetNeighbours(Node node) => Grid.GetNeighbours(node);
+
+        public void SwapGrid(Node node) => Grid.SwapGrid(node);
     }
 }

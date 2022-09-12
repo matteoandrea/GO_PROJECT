@@ -93,5 +93,7 @@ namespace Assets.Script.A.GridLogic
             Gizmos.DrawWireCube(transform.position, new Vector3(_gridWorldSize.x, 1, _gridWorldSize.y));
 
         }
+
+        public void SwapGrid(Node node) => grid[node.gridX, node.gridY] = node;
     }
 }

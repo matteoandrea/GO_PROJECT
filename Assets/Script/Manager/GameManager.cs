@@ -5,6 +5,7 @@ using Assets.Script.Command;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Assets.Script.Pawns.Core;
 
 namespace Assets.Script.Manager
 {
@@ -13,7 +14,11 @@ namespace Assets.Script.Manager
         [SerializeField] private InputReader _inputReader;
         public GameManagerProxy _proxy;
 
+        public bool GameWon { get; set; }
+        public bool GameLost { get; set; }
         public Queue<ICommand> commandQueue;
+
+        public List<Pawn> enemyList;
 
         private void Awake()
         {
@@ -40,11 +45,20 @@ namespace Assets.Script.Manager
         public void AddCommand(ICommand command)
         {
             commandQueue.Enqueue(command);
-            ExecuteCommands();
+
+            if (State.StateType != StateTypeEnum.ProcessState)
+                SetState(new ProcessState(this));
         }
 
-        private void ExecuteCommands()
+        public void ExecuteCommands()
         {
+            foreach (var item in commandQueue)
+            {
+                for (int i = 0; i < commandQueue.Count; i++)
+                {
+                    commandQueue.Dequeue().Execute();
+                }
+            }
             if (State.StateType == StateTypeEnum.PlayerState)
             {
                 commandQueue.Dequeue().Execute();
@@ -52,14 +66,15 @@ namespace Assets.Script.Manager
             }
             else
             {
-                for (int i = 0; i < commandQueue.Count; i++)
-                {
-                    commandQueue.Dequeue().Execute();
-                }
+
 
                 if (State.StateType == StateTypeEnum.EnemyState)
                     SetState(new PlayerTurnState(this));
             }
         }
+
+        public void AddEnemy(Pawn enemy) => enemyList.Add(enemy);
+        public void RemoveEnemy(Pawn enemy) => enemyList.Remove(enemy);
+
     }
 }

@@ -13,10 +13,14 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
+            if (_manager.GameLost)
+            {
+                StateMachine.SetState(new WinState(StateMachine));
+                return base.OnEnterState();
+            }
             _manager = StateMachine.GetComponent<GameManager>();
             _manager.InvokeOnStartPlayerTurn();
             _manager.SetPlayerInput(true);
-
 
             return base.OnEnterState();
         }

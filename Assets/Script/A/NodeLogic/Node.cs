@@ -7,7 +7,7 @@ namespace Assets.Script.A.NodeLogic
 {
     public class Node : MonoBehaviour, IHeapItem<Node>
     {
-        public bool walkable;
+        public bool walkable = true;
         public Vector3 worldPosition;
 
         public int gCost, hCost, gridX, gridY;
@@ -37,6 +37,14 @@ namespace Assets.Script.A.NodeLogic
             name = $"{gridX.ToString()},{gridY.ToString()}";
 
             walkable = !(Physics.CheckSphere(transform.position, _radius, mask));
+            gameObject.SetActive(walkable);
+        }
+
+        public void InitManual()
+        {
+            this.worldPosition = transform.position;
+            walkable = true;         
+            name = $"{gridX.ToString()},{gridY.ToString()}/{name}";
         }
 
         public int CompareTo(Node nodeToCompare)

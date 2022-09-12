@@ -10,8 +10,9 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
-            yield return new WaitForSeconds(1);
-            StateMachine.SetState(new PlayerTurnState(StateMachine));
+            //yield return new WaitForSeconds(1);
+            StateMachine.SetState(new ProcessState(StateMachine));
+            yield break;
         }
     }
 }
