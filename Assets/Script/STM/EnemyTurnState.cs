@@ -15,7 +15,6 @@ namespace Assets.Script.STM
         {
             Debug.Log($"Entrou{StateType}");
 
-
             _manager = StateMachine.GetComponent<GameManager>();
 
             if (_manager.enemyList.Count <= 0)
@@ -24,10 +23,8 @@ namespace Assets.Script.STM
                 yield break;
             }
 
-            //do something....
+            _manager._proxy.OnStartEnemyTurn();
             yield break;
         }
-
-
     }
 }

@@ -32,6 +32,9 @@ namespace Assets.Script.A.PathFindingLogic
             var startNode = _grid.NodeFromWorldPoint(startPos);
             var targetNode = _grid.NodeFromWorldPoint(targetPos);
 
+            Debug.Log($"Start: {startNode}");
+            Debug.Log($"End: {targetNode}");
+
             if (startNode.walkable && targetNode.walkable)
             {
 
@@ -72,7 +75,7 @@ namespace Assets.Script.A.PathFindingLogic
             yield return null;
             if (pathSuccess) wayPoints = RetracePath(startNode, targetNode);
 
-            _pathRequestManager.FinishProcessPath(wayPoints, pathSuccess);
+            _pathRequestManager.FinishedProcessPath(wayPoints, pathSuccess);
 
         }
 
@@ -86,7 +89,7 @@ namespace Assets.Script.A.PathFindingLogic
                 path.Add(currentNode);
                 currentNode = currentNode.parent;
             }
-
+           
             path.Reverse();
 
             var wayPoints = new Vector3[path.Count];

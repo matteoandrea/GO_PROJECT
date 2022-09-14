@@ -27,7 +27,7 @@ namespace Assets.Script.A.NodeLogic
         {
             var player = hit.GetComponent<Pawn>();
 
-            if (player == null || player.PawnType != PawnType.Player) return;
+            if (player == null) return;
             _managerProxy.GameWon = true;
         }
 

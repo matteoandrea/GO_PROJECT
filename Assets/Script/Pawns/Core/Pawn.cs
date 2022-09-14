@@ -10,24 +10,22 @@ namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
-        [SerializeField] public PawnType PawnType { get; protected set; }
-        public Node currentNode;
+        [HideInInspector] public Node currentNode;
 
         [SerializeField] protected GameManagerProxy _gameManagerProxy;
 
         protected Animator _animator;
-        protected Node _nodeToMove;
+        protected Vector3 _targetPosition;
+        protected NodeInteraction _nodeInteraction;
 
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
         }
 
-        protected abstract void CalculatePath();
-
         protected virtual void MoveAction()
         {
-            ICommand command = new MoveCommand(_nodeToMove, transform, _animator);
+            ICommand command = new MoveCommand(_targetPosition, transform, _animator);
             _gameManagerProxy.AddCommand(command);
         }
     }

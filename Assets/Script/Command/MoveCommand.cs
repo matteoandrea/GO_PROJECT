@@ -10,16 +10,16 @@ namespace Assets.Script.Command
 {
     public class MoveCommand : ICommand
     {
-        Transform transform;
-        Node node;
-        Animator animator;
+        private Transform transform;
+        private Vector3 targetPosition;
+        private Animator animator;
 
         private float _speed = 1;
 
-        public MoveCommand(Node node, Transform transform, Animator animator)
+        public MoveCommand(Vector3 targetPosition, Transform transform, Animator animator)
         {
             this.transform = transform;
-            this.node = node;
+            this.targetPosition = targetPosition;
             this.animator = animator;
         }
 
@@ -29,8 +29,8 @@ namespace Assets.Script.Command
 
             var sequence = DOTween.Sequence();
             sequence
-                .Join(transform.DOLookAt(node.transform.position, .5f))
-                .Join(transform.DOMove(node.transform.position, _speed))
+                .Join(transform.DOLookAt(targetPosition, .5f))
+                .Join(transform.DOMove(targetPosition, _speed))
                 .OnComplete(() =>
                 {
                     animator.SetBool("Walking", false);

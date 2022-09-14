@@ -29,13 +29,6 @@ namespace Assets.Script.A.PathFindingLogic
             TryProcessNext();
         }
 
-        public void FinishProcessPath(Vector3[] path, bool success)
-        {
-            _currentRequest.callback(path, success);
-            _isProcessingPath = false;
-            TryProcessNext();
-        }
-
         private void TryProcessNext()
         {
             if (!_isProcessingPath && pathRequestsQueue.Count > 0)
@@ -44,6 +37,13 @@ namespace Assets.Script.A.PathFindingLogic
                 _isProcessingPath = true;
                 _pathFinding.StartFindPath(_currentRequest.pathStart, _currentRequest.pathEnd);
             }
+        }
+
+        public void FinishedProcessPath(Vector3[] path, bool success)
+        {
+            _currentRequest.callback(path, success);
+            _isProcessingPath = false;
+            TryProcessNext();
         }
 
         struct PathRequest

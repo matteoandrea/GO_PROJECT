@@ -56,8 +56,10 @@ namespace Assets.Script.Manager
         {
             foreach (var item in commandQueue)
             {
-                commandQueue.Dequeue().Execute();
+                item.Execute();
             }
+
+            commandQueue.Clear();
         }
 
         public void AddEnemy(Pawn enemy) => enemyList.Add(enemy);

@@ -18,16 +18,14 @@ namespace Assets.Script.Pawns.Player
         {
             _inputReader.clickEvent += MoveAction;
             _inputReader.mousePositionEvent += OnMousePositon;
-
-            _managerProxy.startPlayerTurnEvent += CalculatePath;
+            _managerProxy.startPlayerTurnEvent += CheckDirections;
         }
 
         private void OnDisable()
         {
             _inputReader.clickEvent -= MoveAction;
             _inputReader.mousePositionEvent -= OnMousePositon;
-
-            _managerProxy.startPlayerTurnEvent -= CalculatePath;
+            _managerProxy.startPlayerTurnEvent -= CheckDirections;
         }
 
         protected override void Awake()
@@ -36,15 +34,9 @@ namespace Assets.Script.Pawns.Player
             base.Awake();
         }
 
-        private void Start()
-        {
-            PawnType = PawnType.Player;
-        }
+        private void OnMousePositon(Vector2 pos) => _mousePosition = pos;
 
-        private void OnMousePositon(Vector2 pos)
-        {
-            _mousePosition = pos;
-        }
+        private void CheckDirections() => _nodeInteraction.EnableArrows();
 
         protected override void MoveAction()
         {
@@ -56,13 +48,27 @@ namespace Assets.Script.Pawns.Player
 
             if (direction == null) return;
 
-            _nodeToMove = direction.PlayerChoose();
+            _nodeInteraction.DisableArrows();
+            _targetPosition = direction.nodePosition;
+
             base.MoveAction();
         }
 
-        protected override void CalculatePath()
+        private void OnTriggerEnter(Collider hit)
         {
+            if (hit.tag != "Node") return;
 
+            _nodeInteraction = hit.GetComponent<NodeInteraction>();
+
+            _nodeInteraction.Player = this;
+            currentNode = _nodeInteraction.Node;
+        }
+
+        private void OnTriggerExit(Collider hit)
+        {
+            if (hit.tag != "Node") return;
+
+            currentNode = null;
         }
     }
 }

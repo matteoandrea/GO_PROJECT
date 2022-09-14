@@ -23,6 +23,7 @@ namespace Assets.Script.STM
             switch (StateMachine.PreviousState.StateType)
             {
                 case StateTypeEnum.BeginState:
+
                     StateMachine.SetState(new PlayerTurnState(StateMachine));
                     break;
 
@@ -37,8 +38,10 @@ namespace Assets.Script.STM
                     break;
 
                 case StateTypeEnum.EnemyState:
-                    yield return new WaitUntil(() => _manager.enemyList.Count
-                       == _manager.commandQueue.Count);
+                    Debug.Log($"Command {_manager.commandQueue.Count}");
+                    Debug.Log($"Enemy List{_manager.enemyList.Count}");
+                    yield return new WaitUntil(() =>
+                    _manager.enemyList.Count == _manager.commandQueue.Count);
 
                     _manager.ExecuteEnemyCommands();
                     yield return new WaitForSeconds(1.1f);
