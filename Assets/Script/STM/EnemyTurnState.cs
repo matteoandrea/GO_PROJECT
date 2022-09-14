@@ -1,6 +1,7 @@
 ﻿using Assets.Script.Manager;
 using Assets.Script.STM.Core;
 using System.Collections;
+using UnityEngine;
 
 namespace Assets.Script.STM
 {
@@ -12,16 +13,19 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
+            Debug.Log($"Entrou{StateType}");
+
+
             _manager = StateMachine.GetComponent<GameManager>();
 
             if (_manager.enemyList.Count <= 0)
             {
                 StateMachine.SetState(new PlayerTurnState(StateMachine));
-                return base.OnEnterState();
+                yield break;
             }
 
             //do something....
-            return base.OnEnterState();
+            yield break;
         }
 
 

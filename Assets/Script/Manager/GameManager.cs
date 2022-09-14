@@ -50,26 +50,13 @@ namespace Assets.Script.Manager
                 SetState(new ProcessState(this));
         }
 
-        public void ExecuteCommands()
+        public void ExecutePlayerCommands() => commandQueue.Dequeue().Execute();
+
+        public void ExecuteEnemyCommands()
         {
             foreach (var item in commandQueue)
             {
-                for (int i = 0; i < commandQueue.Count; i++)
-                {
-                    commandQueue.Dequeue().Execute();
-                }
-            }
-            if (State.StateType == StateTypeEnum.PlayerState)
-            {
                 commandQueue.Dequeue().Execute();
-                SetState(new EnemyTurnState(this));
-            }
-            else
-            {
-
-
-                if (State.StateType == StateTypeEnum.EnemyState)
-                    SetState(new PlayerTurnState(this));
             }
         }
 

@@ -16,6 +16,8 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
+            Debug.Log($"Entrou{StateType}");
+
             _manager = StateMachine.GetComponent<GameManager>();
 
             switch (StateMachine.PreviousState.StateType)
@@ -25,17 +27,20 @@ namespace Assets.Script.STM
                     break;
 
                 case StateTypeEnum.PlayerState:
-                    _manager.ExecuteCommands();
+
+                    _manager.ExecutePlayerCommands();
                     yield return new WaitForSeconds(1.1f);
+
                     if (_manager.GameWon) StateMachine.SetState(new WinState(StateMachine));
                     else StateMachine.SetState(new EnemyTurnState(StateMachine));
+
                     break;
 
                 case StateTypeEnum.EnemyState:
                     yield return new WaitUntil(() => _manager.enemyList.Count
                        == _manager.commandQueue.Count);
 
-                    _manager.ExecuteCommands();
+                    _manager.ExecuteEnemyCommands();
                     yield return new WaitForSeconds(1.1f);
                     StateMachine.SetState(new PlayerTurnState(StateMachine));
                     break;
