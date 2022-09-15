@@ -18,10 +18,9 @@ namespace Assets.Script.Pawns.Enemy
 
         [SerializeField] protected Vector2 startTargetNodeRef;
 
-        [SerializeField] protected Node _currentNodetarget, _startNodeTarget, _endNodeTarget;
-
-        public Vector3[] currentPath;
-        public int currentWaypoint;
+        protected Node _currentNodetarget, _startNodeTarget, _endNodeTarget;
+        protected Vector3[] _currentPath;
+        protected int _currentWaypoint;
 
         protected virtual void OnEnable() =>
             _managerProxy.startEnemyTurnEvent += ThinkToAct;
@@ -29,24 +28,32 @@ namespace Assets.Script.Pawns.Enemy
         protected virtual void OnDisable() =>
             _managerProxy.startEnemyTurnEvent -= ThinkToAct;
 
-        protected virtual void Start()
+        private void Start()
         {
             _managerProxy.AddEnemy(this);
+            StartCoroutine(Init());
+        }
+
+        protected virtual IEnumerator Init()
+        {
+            yield return new WaitForEndOfFrame();
             _currentNodetarget = _endNodeTarget = _gridProxy.GetNode(startTargetNodeRef);
             _startNodeTarget = currentNode;
         }
 
-        private void ThinkToAct()
+        public override void Die()
         {
-            StartCoroutine(Act());
+            base.Die();
+            _managerProxy.RemoveEnemy(this);
         }
+
+        private void ThinkToAct() => StartCoroutine(Act());
 
         protected abstract IEnumerator Act();
 
         protected void CalculatePath(Vector3[] newPath, bool pathSuccessful)
         {
-            Debug.Log("hey");
-            if (pathSuccessful) currentPath = newPath;
+            if (pathSuccessful) _currentPath = newPath;
         }
 
         private void OnTriggerEnter(Collider hit)

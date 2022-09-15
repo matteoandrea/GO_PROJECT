@@ -12,8 +12,8 @@ namespace Assets.Script.A.NodeLogic
         [SerializeField] private GridProxy _gridProxy = default;
         [SerializeField] private Arrow[] _arrows = new Arrow[4];
 
-        public Pawn Player { get; set; }
-        private List<EnemyBase> _enemyList = new List<EnemyBase>();
+        private Pawn _player;
+        private List<Pawn> _enemyList = new List<Pawn>();
 
         public Node Node;
         private List<Arrow> _arrowList = new List<Arrow>();
@@ -41,12 +41,30 @@ namespace Assets.Script.A.NodeLogic
             }
         }
 
-        public void AddEnemyToList(EnemyBase enemy)
+        public void AddPlayer(Pawn player)
         {
-            if (!_enemyList.Contains(enemy)) _enemyList.Add(enemy);
+            _player = player;
+
+            if (_enemyList.Count <= 0) return;
+
+            _player.Attack();
+            foreach (var item in _enemyList) { item.Die(); }
+            _enemyList.Clear();
         }
 
-        public void RemoveEnemyFromList(EnemyBase enemy)
+        public void RemovePlayer() => _player = null;
+
+        public void AddEnemyToList(Pawn enemy)
+        {
+            if (_enemyList.Contains(enemy)) return;
+            _enemyList.Add(enemy);
+
+            if (_player == null) return;
+            enemy.Attack();
+            _player.Die();
+        }
+
+        public void RemoveEnemyFromList(Pawn enemy)
         {
             if (_enemyList.Contains(enemy)) _enemyList.Remove(enemy);
         }

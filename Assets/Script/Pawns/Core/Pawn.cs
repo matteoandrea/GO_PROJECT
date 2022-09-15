@@ -10,7 +10,7 @@ namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
-         public Node currentNode;
+        public Node currentNode;
 
         [SerializeField] protected GameManagerProxy _gameManagerProxy;
 
@@ -22,6 +22,10 @@ namespace Assets.Script.Pawns.Core
         {
             _animator = GetComponent<Animator>();
         }
+
+        public virtual void Die() => _animator.SetTrigger("Die");
+
+        public void Attack() => _animator.SetTrigger("Attack");
 
         protected virtual void MoveAction()
         {

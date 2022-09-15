@@ -34,6 +34,12 @@ namespace Assets.Script.Pawns.Player
             base.Awake();
         }
 
+        public override void Die()
+        {
+            base.Die();
+            _managerProxy.GameLost = true;
+        }
+
         private void OnMousePositon(Vector2 pos) => _mousePosition = pos;
 
         private void CheckDirections() => _nodeInteraction.EnableArrows();
@@ -59,8 +65,7 @@ namespace Assets.Script.Pawns.Player
             if (!hit.CompareTag("Node")) return;
 
             _nodeInteraction = hit.GetComponent<NodeInteraction>();
-
-            _nodeInteraction.Player = this;
+            _nodeInteraction.AddPlayer(this);
             currentNode = _nodeInteraction.Node;
         }
 
@@ -68,6 +73,8 @@ namespace Assets.Script.Pawns.Player
         {
             if (!hit.CompareTag("Node")) return;
 
+            _nodeInteraction = hit.GetComponent<NodeInteraction>();
+            _nodeInteraction.RemovePlayer();
             currentNode = null;
         }
     }

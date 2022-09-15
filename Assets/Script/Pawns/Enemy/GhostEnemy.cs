@@ -8,35 +8,30 @@ namespace Assets.Script.Pawns.Enemy
 {
     public class GhostEnemy : EnemyBase
     {
-        protected override void Start()
+        protected override IEnumerator Init()
         {
-            base.Start();
-
-        }
-
-        protected override IEnumerator Act()
-        {
-            if (currentPath == null)
+            yield return base.Init();
+            if (_currentPath == null)
             {
                 _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
                 yield return null;
             }
-            if (_startNodeTarget == null) _startNodeTarget = currentNode;
-
-
-            if (currentWaypoint > currentPath.Length - 1)
+        }
+        protected override IEnumerator Act()
+        {
+            if (_currentWaypoint > _currentPath.Length - 1)
             {
                 if (currentNode == _startNodeTarget) _currentNodetarget = _endNodeTarget;
                 else _currentNodetarget = _startNodeTarget;
 
                 _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
-                currentWaypoint = 0;
+                _currentWaypoint = 0;
                 yield return null;
             }
 
-            _targetPosition = currentPath[currentWaypoint];
+            _targetPosition = _currentPath[_currentWaypoint];
             MoveAction();
-            currentWaypoint++;
+            _currentWaypoint++;
 
         }
     }
