@@ -35,7 +35,6 @@ namespace Assets.Script.Manager
 
         public void InvokeOnStartEnemyTurn() => _proxy.OnStartEnemyTurn();
 
-
         public void SetPlayerInput(bool e)
         {
             if (e) _inputReader.EnableGameplayInput();
@@ -63,6 +62,7 @@ namespace Assets.Script.Manager
         }
 
         public void AddEnemy(Pawn enemy) => enemyList.Add(enemy);
+
         public void RemoveEnemy(Pawn enemy) => enemyList.Remove(enemy);
 
     }

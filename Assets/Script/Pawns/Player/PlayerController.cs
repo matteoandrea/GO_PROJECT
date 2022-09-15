@@ -2,30 +2,31 @@
 using Assets.Script.Input;
 using Assets.Script.Manager;
 using Assets.Script.Pawns.Core;
-using Assets.Script.A.NodeLogic;
+using Assets.Script.Nodes.Core;
+using Assets.Script.Command;
 
 namespace Assets.Script.Pawns.Player
 {
     public class PlayerController : Pawn
     {
         [SerializeField] private InputReader _inputReader = default;
-        [SerializeField] private GameManagerProxy _managerProxy = default;
+        [SerializeField] private LayerMask _interactMask;
 
         private Camera _cam;
         private Vector2 _mousePosition;
 
         private void OnEnable()
         {
-            _inputReader.clickEvent += MoveAction;
+            _inputReader.clickEvent += ChooseAction;
             _inputReader.mousePositionEvent += OnMousePositon;
-            _managerProxy.startPlayerTurnEvent += CheckDirections;
+            _gameManagerProxy.startPlayerTurnEvent += OnStartTurn;
         }
 
         private void OnDisable()
         {
-            _inputReader.clickEvent -= MoveAction;
+            _inputReader.clickEvent -= ChooseAction;
             _inputReader.mousePositionEvent -= OnMousePositon;
-            _managerProxy.startPlayerTurnEvent -= CheckDirections;
+            _gameManagerProxy.startPlayerTurnEvent -= OnStartTurn;
         }
 
         protected override void Awake()
@@ -34,48 +35,44 @@ namespace Assets.Script.Pawns.Player
             base.Awake();
         }
 
-        public override void Die()
+        protected override void OnEnterNode(NodeCore node)
         {
-            base.Die();
-            _managerProxy.GameLost = true;
+
+        }
+
+        protected override void OnExitNode(NodeCore node)
+        {
+
+        }
+
+        protected override void OnStartTurn()
+        {
+            _currentNode.EnableArrows();
+        }
+
+        private void ChooseAction()
+        {
+            Ray ray = _cam.ScreenPointToRay(_mousePosition);
+
+            if (!Physics.Raycast(ray, out RaycastHit hit, _interactMask)) return;
+
+            var script = hit.collider.GetComponent<Arrow>();
+            if (script != null) MoveAction(script);
         }
 
         private void OnMousePositon(Vector2 pos) => _mousePosition = pos;
 
-        private void CheckDirections() => _nodeInteraction.EnableArrows();
-
-        protected override void MoveAction()
+        private void MoveAction(Arrow arrow)
         {
-            Ray ray = _cam.ScreenPointToRay(_mousePosition);
-
-            if (!Physics.Raycast(ray, out RaycastHit hit)) return;
-
-            var direction = hit.collider.GetComponent<Arrow>();
-
-            if (direction == null) return;
-
-            _nodeInteraction.DisableArrows();
-            _targetPosition = direction.nodePosition;
-
-            base.MoveAction();
+            var target = arrow.GetNodeConnection();
+            ICommand command = new PlayerMoveCommand(target, transform, _animator);
+            _gameManagerProxy.AddCommand(command);
         }
 
-        private void OnTriggerEnter(Collider hit)
+        public override void Die()
         {
-            if (!hit.CompareTag("Node")) return;
-
-            _nodeInteraction = hit.GetComponent<NodeInteraction>();
-            _nodeInteraction.AddPlayer(this);
-            currentNode = _nodeInteraction.Node;
-        }
-
-        private void OnTriggerExit(Collider hit)
-        {
-            if (!hit.CompareTag("Node")) return;
-
-            _nodeInteraction = hit.GetComponent<NodeInteraction>();
-            _nodeInteraction.RemovePlayer();
-            currentNode = null;
+            base.Die();
+            _gameManagerProxy.GameLost = true;
         }
     }
 }

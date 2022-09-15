@@ -1,12 +1,15 @@
 ﻿using Assets.Script.Manager;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-namespace Assets.Script.A.NodeLogic
+namespace Assets.Script.Nodes.Core
 {
     public class Arrow : MonoBehaviour
     {
-        [HideInInspector] public Vector3 nodePosition;
+        public Directions directions;
+        private NodeCore _nodeCore;
+        public NodeCore nodeConnection;
 
         [SerializeField] private Vector3 _pos;
         private Tween _tween;
@@ -25,5 +28,17 @@ namespace Assets.Script.A.NodeLogic
             _tween.Kill();
             transform.position = _startPos;
         }
+
+        private void Awake()
+        {
+            _nodeCore = gameObject.GetComponentInParent<NodeCore>();   
+        }
+
+        public Vector3 GetNodeConnection()
+        {
+            _nodeCore.DisableArrows();  
+            return nodeConnection.transform.position;
+        }
+
     }
 }

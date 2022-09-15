@@ -1,4 +1,4 @@
-﻿using Assets.Script.A.PathFindingLogic;
+﻿using Assets.Script.Nodes.Core;
 using System.Collections;
 using System.Linq;
 using System.Threading;
@@ -8,31 +8,34 @@ namespace Assets.Script.Pawns.Enemy
 {
     public class GhostEnemy : EnemyBase
     {
+        protected override IEnumerator Act()
+        {
+            throw new System.NotImplementedException();
+        }
+
         protected override IEnumerator Init()
         {
             yield return base.Init();
             if (_currentPath == null)
             {
-                _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
+                //_pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
                 yield return null;
             }
         }
-        protected override IEnumerator Act()
+
+        protected override void OnEnterNode(NodeCore node)
         {
-            if (_currentWaypoint > _currentPath.Length - 1)
-            {
-                if (currentNode == _startNodeTarget) _currentNodetarget = _endNodeTarget;
-                else _currentNodetarget = _startNodeTarget;
+            throw new System.NotImplementedException();
+        }
 
-                _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
-                _currentWaypoint = 0;
-                yield return null;
-            }
+        protected override void OnExitNode(NodeCore node)
+        {
+            throw new System.NotImplementedException();
+        }
 
-            _targetPosition = _currentPath[_currentWaypoint];
-            MoveAction();
-            _currentWaypoint++;
-
+        protected override void OnStartTurn()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Assets.Script.A.NodeLogic;
-using Assets.Script.Manager;
+﻿using Assets.Script.Manager;
 using Assets.Script.Pawns;
 using DG.Tweening;
 using System.Collections;
@@ -8,15 +7,15 @@ using UnityEngine.AI;
 
 namespace Assets.Script.Command
 {
-    public class MoveCommand : ICommand
+    public class PlayerMoveCommand : ICommand
     {
         private Transform transform;
         private Vector3 targetPosition;
         private Animator animator;
 
-        private float _speed = 1;
+        private float _speed = .9f;
 
-        public MoveCommand(Vector3 targetPosition, Transform transform, Animator animator)
+        public PlayerMoveCommand(Vector3 targetPosition, Transform transform, Animator animator)
         {
             this.transform = transform;
             this.targetPosition = targetPosition;
