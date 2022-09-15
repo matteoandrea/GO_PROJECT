@@ -19,28 +19,22 @@ namespace Assets.Script.A.PathFindingLogic
             _grid = GetComponent<Grid>();
         }
 
-        public void StartFindPath(Vector3 startPos, Vector3 endPos)
-        {
-            StartCoroutine(FindPath(startPos, endPos));
-        }
+        public void StartFindPath(Node startPos, Node targetPos) => StartCoroutine(FindPath(startPos, targetPos));
 
-        private IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
+        private IEnumerator FindPath(Node startNode, Node targetNode)
         {
+            Debug.Log($"start: {startNode}, End: {targetNode}");
             var wayPoints = new Vector3[0];
             var pathSuccess = false;
 
-            var startNode = _grid.NodeFromWorldPoint(startPos);
-            var targetNode = _grid.NodeFromWorldPoint(targetPos);
-
-            Debug.Log($"Start: {startNode}");
-            Debug.Log($"End: {targetNode}");
+            //var startNode = _grid.NodeFromWorldPoint(startPos);
+            //var targetNode = _grid.NodeFromWorldPoint(targetPos);
+            startNode.parent = startNode;
 
             if (startNode.walkable && targetNode.walkable)
             {
-
                 Heap<Node> openSet = new Heap<Node>(_grid.MaxSize);
                 HashSet<Node> closeSet = new HashSet<Node>();
-
                 openSet.Add(startNode);
 
                 while (openSet.Count > 0)
@@ -66,7 +60,7 @@ namespace Assets.Script.A.PathFindingLogic
                             neighbours.parent = currentNode;
 
                             if (!openSet.Contains(neighbours)) openSet.Add(neighbours);
-
+                            else openSet.UpdateItem(neighbours);
                         }
                     }
 
@@ -89,7 +83,7 @@ namespace Assets.Script.A.PathFindingLogic
                 path.Add(currentNode);
                 currentNode = currentNode.parent;
             }
-           
+            Debug.Log($"Path Count: {path.Count}");
             path.Reverse();
 
             var wayPoints = new Vector3[path.Count];
@@ -106,7 +100,8 @@ namespace Assets.Script.A.PathFindingLogic
             var distX = Mathf.Abs(nodeA.gridX - nodeB.gridX);
             var distY = Mathf.Abs(nodeA.gridY - nodeB.gridY);
 
-            return 10 * distY + 10 * distX;
+            if (distX > distY) return distY + 10 * (distX - distY);
+            else return distX + 10 * (distY - distX);
         }
     }
 }

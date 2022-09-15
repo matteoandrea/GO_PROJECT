@@ -10,7 +10,7 @@ namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
-        [HideInInspector] public Node currentNode;
+         public Node currentNode;
 
         [SerializeField] protected GameManagerProxy _gameManagerProxy;
 

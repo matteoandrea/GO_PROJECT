@@ -1,6 +1,7 @@
 ﻿using Assets.Script.A.GridLogic;
 using Assets.Script.Manager;
 using Assets.Script.Pawns.Core;
+using Assets.Script.Pawns.Enemy;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,9 +13,9 @@ namespace Assets.Script.A.NodeLogic
         [SerializeField] private Arrow[] _arrows = new Arrow[4];
 
         public Pawn Player { get; set; }
-        private List<Pawn> _enemyList;
+        private List<EnemyBase> _enemyList = new List<EnemyBase>();
 
-        public Node Node { get; private set; }
+        public Node Node;
         private List<Arrow> _arrowList = new List<Arrow>();
 
         private void Awake()
@@ -40,12 +41,12 @@ namespace Assets.Script.A.NodeLogic
             }
         }
 
-        public void AddEnemyToList(Pawn enemy)
+        public void AddEnemyToList(EnemyBase enemy)
         {
             if (!_enemyList.Contains(enemy)) _enemyList.Add(enemy);
         }
 
-        public void RemoveEnemyFromList(Pawn enemy)
+        public void RemoveEnemyFromList(EnemyBase enemy)
         {
             if (_enemyList.Contains(enemy)) _enemyList.Remove(enemy);
         }

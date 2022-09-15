@@ -16,7 +16,7 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
-            Debug.Log($"Entrou{StateType}");
+            //Debug.Log($"Entrou{StateType}");
 
             _manager = StateMachine.GetComponent<GameManager>();
 
@@ -38,8 +38,8 @@ namespace Assets.Script.STM
                     break;
 
                 case StateTypeEnum.EnemyState:
-                    Debug.Log($"Command {_manager.commandQueue.Count}");
-                    Debug.Log($"Enemy List{_manager.enemyList.Count}");
+                    //Debug.Log($"Command {_manager.commandQueue.Count}");
+                    //Debug.Log($"Enemy List{_manager.enemyList.Count}");
                     yield return new WaitUntil(() =>
                     _manager.enemyList.Count == _manager.commandQueue.Count);
 

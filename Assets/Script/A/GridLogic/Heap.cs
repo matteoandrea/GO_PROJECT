@@ -6,43 +6,39 @@ namespace Assets.Script.A.GridLogic
 {
     public class Heap<T> where T : IHeapItem<T>
     {
-        T[] items;
-        int currentItemCount;
+        private T[] _items;
+        private int _currentItemCount;
 
         public Heap(int maxHeapSize)
         {
-            items = new T[maxHeapSize];
+            _items = new T[maxHeapSize];
         }
 
         public void Add(T item)
         {
-            item.HeapIndex = currentItemCount;
-            items[currentItemCount] = item;
+            item.HeapIndex = _currentItemCount;
+            _items[_currentItemCount] = item;
             SortUp(item);
-            currentItemCount++;
+            _currentItemCount++;
         }
 
         public T RemoveFirst()
         {
-            var firstItem = items[0];
-            currentItemCount--;
+            var firstItem = _items[0];
+            _currentItemCount--;
 
-            items[0] = items[currentItemCount];
-            items[0].HeapIndex = 0;
+            _items[0] = _items[_currentItemCount];
+            _items[0].HeapIndex = 0;
 
-            SortDown(items[0]);
+            SortDown(_items[0]);
             return firstItem;
         }
 
-        public void UpdateItem(T item)
-        {
-            SortUp(item);
+        public void UpdateItem(T item) => SortUp(item);
 
-        }
+        public int Count { get { return _currentItemCount; } }
 
-        public int Count { get { return currentItemCount; } }
-
-        public bool Contains(T item) { return Equals(items[item.HeapIndex], item); }
+        public bool Contains(T item) { return Equals(_items[item.HeapIndex], item); }
 
         public void SortDown(T item)
         {
@@ -52,14 +48,14 @@ namespace Assets.Script.A.GridLogic
                 var childIndexRight = item.HeapIndex * 2 + 2;
                 var swapIndex = 0;
 
-                if (childIndexLeft < currentItemCount)
+                if (childIndexLeft < _currentItemCount)
                 {
                     swapIndex = childIndexLeft;
 
-                    if (childIndexRight < currentItemCount)
-                        if (items[childIndexLeft].CompareTo(items[childIndexRight]) < 0) swapIndex = childIndexRight;
+                    if (childIndexRight < _currentItemCount)
+                        if (_items[childIndexLeft].CompareTo(_items[childIndexRight]) < 0) swapIndex = childIndexRight;
 
-                    if (item.CompareTo(items[swapIndex]) < 0) Swap(item, items[swapIndex]);
+                    if (item.CompareTo(_items[swapIndex]) < 0) Swap(item, _items[swapIndex]);
                     else return;
                 }
                 else return;
@@ -72,17 +68,21 @@ namespace Assets.Script.A.GridLogic
 
             while (true)
             {
-                var parentItem = items[parentIndex];
+                var parentItem = _items[parentIndex];
 
                 if (item.CompareTo(parentItem) > 0) Swap(item, parentItem);
                 else break;
+
+                parentIndex = (item.HeapIndex - 1) / 2;
             }
+
+
         }
 
         public void Swap(T itemA, T itemB)
         {
-            items[itemA.HeapIndex] = itemB;
-            items[itemB.HeapIndex] = itemA;
+            _items[itemA.HeapIndex] = itemB;
+            _items[itemB.HeapIndex] = itemA;
 
             var itemAIndex = itemA.HeapIndex;
 

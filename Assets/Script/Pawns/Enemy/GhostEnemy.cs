@@ -1,6 +1,7 @@
 ﻿using Assets.Script.A.PathFindingLogic;
 using System.Collections;
 using System.Linq;
+using System.Threading;
 using UnityEngine;
 
 namespace Assets.Script.Pawns.Enemy
@@ -10,21 +11,33 @@ namespace Assets.Script.Pawns.Enemy
         protected override void Start()
         {
             base.Start();
-            pathProxy.RequestPath(transform.position, target.position, CalculatePath);
+
         }
 
-        protected override void ThinkToAct()
+        protected override IEnumerator Act()
         {
-            if (currentWaypoint >= currentPath.Length - 1)
+            if (currentPath == null)
             {
-                currentPath.Reverse();
+                _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
+                yield return null;
+            }
+            if (_startNodeTarget == null) _startNodeTarget = currentNode;
+
+
+            if (currentWaypoint > currentPath.Length - 1)
+            {
+                if (currentNode == _startNodeTarget) _currentNodetarget = _endNodeTarget;
+                else _currentNodetarget = _startNodeTarget;
+
+                _pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
                 currentWaypoint = 0;
+                yield return null;
             }
 
-            currentWaypoint++;
             _targetPosition = currentPath[currentWaypoint];
-
             MoveAction();
+            currentWaypoint++;
+
         }
     }
 }

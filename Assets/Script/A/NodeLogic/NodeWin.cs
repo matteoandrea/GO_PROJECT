@@ -25,9 +25,7 @@ namespace Assets.Script.A.NodeLogic
 
         private void OnTriggerEnter(Collider hit)
         {
-            var player = hit.GetComponent<Pawn>();
-
-            if (player == null) return;
+            if (!hit.CompareTag("Player")) return;
             _managerProxy.GameWon = true;
         }
 

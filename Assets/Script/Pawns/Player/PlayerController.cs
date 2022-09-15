@@ -56,7 +56,7 @@ namespace Assets.Script.Pawns.Player
 
         private void OnTriggerEnter(Collider hit)
         {
-            if (hit.tag != "Node") return;
+            if (!hit.CompareTag("Node")) return;
 
             _nodeInteraction = hit.GetComponent<NodeInteraction>();
 
@@ -66,7 +66,7 @@ namespace Assets.Script.Pawns.Player
 
         private void OnTriggerExit(Collider hit)
         {
-            if (hit.tag != "Node") return;
+            if (!hit.CompareTag("Node")) return;
 
             currentNode = null;
         }

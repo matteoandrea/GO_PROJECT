@@ -1,5 +1,6 @@
 ﻿using Assets.Script.Command;
 using Assets.Script.Pawns.Core;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,7 +22,7 @@ namespace Assets.Script.Manager
 
 
         public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
-        public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();
+        public void OnStartEnemyTurn() => startEnemyTurnEvent?.DynamicInvoke();
 
         public void AddEnemy(Pawn enemy) => GameManager.AddEnemy(enemy);
         public void RemoveEnemy(Pawn enemy) => GameManager.RemoveEnemy(enemy);

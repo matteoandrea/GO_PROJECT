@@ -12,13 +12,13 @@ namespace Assets.Script.STM.Core
 
         public virtual IEnumerator OnEnterState()
         {
-            Debug.Log($"Entrou {StateType}");
+            //Debug.Log($"Entrou {StateType}");
             yield break;
         }
         public virtual IEnumerator OnUpdateState() { yield break; }
         public virtual IEnumerator OnExitState()
         {
-            Debug.Log($"Saiu {StateType}");
+            //Debug.Log($"Saiu {StateType}");
             yield break;
         }
     }

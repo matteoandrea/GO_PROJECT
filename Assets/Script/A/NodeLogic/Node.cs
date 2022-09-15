@@ -44,7 +44,7 @@ namespace Assets.Script.A.NodeLogic
         {
             this.worldPosition = transform.position;
             walkable = true;         
-            name = $"{gridX.ToString()},{gridY.ToString()}/{name}";
+            name = $"{gridX.ToString()},{gridY.ToString()}: {name}";
         }
 
         public int CompareTo(Node nodeToCompare)
