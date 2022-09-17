@@ -11,23 +11,24 @@ namespace Assets.Script.Pawns.Core
         [SerializeField]
         protected GameManagerProxy _gameManagerProxy;
         [Space(10)]
- 
 
         [SerializeField]
         protected BaseNode _currentNode;
         protected Animator _animator { get; set; }
 
         protected virtual void Awake()
-        {
-            _animator = GetComponent<Animator>();
-        }
+            => _animator = GetComponent<Animator>();
 
         protected abstract void OnEnterNode(BaseNode node);
         protected abstract void OnExitNode(BaseNode node);
         protected abstract void OnStartTurn();
+        public abstract void MoveAction(Vector3 targetPosition);
 
-        public virtual void Die() => _animator.SetTrigger("Die");
-        public void Attack() => _animator.SetTrigger("Attack");
+        public virtual void Die() =>
+            _animator.SetTrigger("Die");
+
+        public virtual void Attack() =>
+            _animator.SetTrigger("Attack");
 
         private void OnTriggerEnter(Collider hit)
         {

@@ -22,12 +22,13 @@ namespace Assets.Script.Manager
 
         private void Awake()
         {
-            commandQueue = new Queue<ICommand>();
-            _proxy.GameManager = this;
+           
         }
 
         private void Start()
         {
+            commandQueue = new Queue<ICommand>();
+            _proxy.GameManager = this;
             SetState(new BeginState(this));
         }
 

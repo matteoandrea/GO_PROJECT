@@ -16,14 +16,14 @@ namespace Assets.Script.Interactions
 
         private ArrowAnimation _arrowAnimation { get; set; }
         private LineConnection _lineConnetion { get; set; }
-
+        private Collider _collider { get; set; }
 
         private void Awake()
         {
-            _arrowAnimation =
-                GetComponentInChildren<ArrowAnimation>(true);
+            _arrowAnimation = GetComponentInChildren<ArrowAnimation>(true);
             _currentNode = GetComponentInParent<BaseNode>(true);
             _lineConnetion = GetComponent<LineConnection>();
+            _collider = GetComponent<Collider>();
         }
 
         public void SetMoveNode(Dictionary<Directions, BaseNode> connections)
@@ -41,8 +41,10 @@ namespace Assets.Script.Interactions
 
         public void SetArrowState(bool state)
         {
-            if (_nodeToMove != null)
-                _arrowAnimation.gameObject.SetActive(state);
+            if (_nodeToMove == null) return;
+
+            _arrowAnimation.gameObject.SetActive(state);
+            _collider.enabled = state;
         }
 
         public void ExecuteInteraction(PlayerController player)

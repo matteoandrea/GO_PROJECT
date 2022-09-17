@@ -36,19 +36,13 @@ namespace Assets.Script.Pawns.Player
         }
 
         protected override void OnEnterNode(BaseNode node)
-        {
-
-        }
+            => node.Player = this;
 
         protected override void OnExitNode(BaseNode node)
-        {
-
-        }
+            => node.Player = null;
 
         protected override void OnStartTurn()
-        {
-            _currentNode.PlayerStartTurn();
-        }
+            => _currentNode.PlayerStartTurn();
 
         private void Interact()
         {
@@ -56,17 +50,21 @@ namespace Assets.Script.Pawns.Player
 
             if (!Physics.Raycast(ray, out RaycastHit hit, _interactMask)) return;
 
-
-
             var script = hit.collider.GetComponent<IInteract>();
             if (script != null) script.ExecuteInteraction(this);
         }
 
-        private void OnMousePositon(Vector2 pos) => _mousePosition = pos;
+        private void OnMousePositon(Vector2 pos)
+            => _mousePosition = pos;
 
-        public void MoveAction(Vector3 targetPosition)
+        public override void MoveAction(Vector3 targetPosition)
         {
-            ICommand command = new PlayerMoveCommand(targetPosition, _walkSpeed, _rotationSpeed, transform, _animator);
+            ICommand command = new PlayerMoveCommand(
+                targetPosition,
+                _walkSpeed,
+                _rotationSpeed,
+                transform,
+                _animator);
             _gameManagerProxy.AddCommand(command);
         }
 

@@ -8,16 +8,9 @@ namespace Assets.Script.Nodes.Core
     {
         public BaseNode[] NodesArray { get; set; }
 
-        private void Awake()
-        {
-            NodesArray = GetComponentsInChildren<BaseNode>();
-        }
+        private void Awake() => NodesArray = GetComponentsInChildren<BaseNode>();
 
-        private void Start()
-        {
-            Debug.Log(NodesArray.Length);
-            StartCoroutine(Inicialization());
-        }
+        private void Start() => StartCoroutine(Inicialization());
 
         private IEnumerator Inicialization()
         {

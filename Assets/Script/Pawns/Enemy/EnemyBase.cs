@@ -1,5 +1,7 @@
+using Assets.Script.Commands;
 using Assets.Script.Input;
 using Assets.Script.Manager;
+using Assets.Script.Nodes.Core;
 using Assets.Script.Pawns.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,57 +11,39 @@ namespace Assets.Script.Pawns.Enemy
 {
     public abstract class EnemyBase : Pawn
     {
-        [SerializeField] protected GameManagerProxy _managerProxy = default;
+        [SerializeField]
+        protected LayerMask _incluedlayerMask;
 
-        [SerializeField] protected Vector2 startTargetNodeRef;
+        protected virtual void OnEnable()
+            => _gameManagerProxy.startEnemyTurnEvent += OnStartTurn;
 
-        protected Vector3[] _currentPath;
-        protected int _currentWaypoint;
+        protected virtual void OnDisable()
+            => _gameManagerProxy.startEnemyTurnEvent -= OnStartTurn;
 
-        protected virtual void OnEnable() =>
-            _managerProxy.startEnemyTurnEvent += ThinkToAct;
+        private void Start() => _gameManagerProxy.AddEnemy(this);
 
-        protected virtual void OnDisable() =>
-            _managerProxy.startEnemyTurnEvent -= ThinkToAct;
-
-        private void Start()
+        public override void MoveAction(Vector3 targetPosition)
         {
-            _managerProxy.AddEnemy(this);
-            StartCoroutine(Init());
+            ICommand command = new EnemyMoveCommand(
+                targetPosition,
+                _walkSpeed,
+                _rotationSpeed,
+                transform,
+                _animator,
+                _incluedlayerMask);
+            _gameManagerProxy.AddCommand(command);
         }
 
-        protected virtual IEnumerator Init()
-        {
-            yield return new WaitForEndOfFrame();
+        protected override void OnEnterNode(BaseNode node)
+            => node.AddEnemy(this);
 
-        }
+        protected override void OnExitNode(BaseNode node)
+            => node.RemoveEnemy(this);
 
         public override void Die()
         {
             base.Die();
-            _managerProxy.RemoveEnemy(this);
-        }
-
-        private void ThinkToAct() => StartCoroutine(Act());
-
-        protected abstract IEnumerator Act();
-
-        protected void CalculatePath(Vector3[] newPath, bool pathSuccessful)
-        {
-            if (pathSuccessful) _currentPath = newPath;
-        }
-
-        private void OnTriggerEnter(Collider hit)
-        {
-            if (!hit.CompareTag("Node")) return;
-
-           
-        }
-
-        private void OnTriggerExit(Collider hit)
-        {
-            if (!hit.CompareTag("Node")) return;
-
+            _gameManagerProxy.RemoveEnemy(this);
         }
     }
 }

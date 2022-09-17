@@ -1,41 +1,26 @@
-﻿using Assets.Script.Nodes.Core;
-using System.Collections;
-using System.Linq;
-using System.Threading;
+﻿using Assets.Script.Commands;
+using Assets.Script.Nodes.Core;
 using UnityEngine;
+using static PlasticPipe.PlasticProtocol.Messages.NegotiationCommand;
 
 namespace Assets.Script.Pawns.Enemy
 {
     public class GhostEnemy : EnemyBase
     {
-        protected override IEnumerator Act()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override IEnumerator Init()
-        {
-            yield return base.Init();
-            if (_currentPath == null)
-            {
-                //_pathProxy.RequestPath(currentNode, _currentNodetarget, CalculatePath);
-                yield return null;
-            }
-        }
-
-        protected override void OnEnterNode(BaseNode node)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void OnExitNode(BaseNode node)
-        {
-            throw new System.NotImplementedException();
-        }
-
         protected override void OnStartTurn()
         {
-            throw new System.NotImplementedException();
+            if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
+                                 _incluedlayerMask))
+            {
+                ICommand command = new RotateCommand(transform, _rotationSpeed);
+                _gameManagerProxy.AddCommand(command);
+            }
+            else
+            {
+                var script = hit.collider.GetComponent<BaseNode>();
+                if (script != null)
+                    MoveAction(hit.transform.position);
+            }
         }
     }
 }

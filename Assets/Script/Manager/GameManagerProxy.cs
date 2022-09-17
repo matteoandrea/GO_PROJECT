@@ -22,7 +22,7 @@ namespace Assets.Script.Manager
 
 
         public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
-        public void OnStartEnemyTurn() => startEnemyTurnEvent?.DynamicInvoke();
+        public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();
 
         public void AddEnemy(Pawn enemy) => GameManager.AddEnemy(enemy);
         public void RemoveEnemy(Pawn enemy) => GameManager.RemoveEnemy(enemy);

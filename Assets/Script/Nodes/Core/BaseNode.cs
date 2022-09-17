@@ -10,15 +10,17 @@ namespace Assets.Script.Nodes.Core
     public class BaseNode : MonoBehaviour
     {
         public Dictionary<Directions, BaseNode> Conections = new();
+        private Pawn _player;
         public Pawn Player
         {
-            get => Player;
+            get { return _player; }
             set
             {
-                Player = value;
+                _player = value;
 
                 if (_enemiesList.Count > 0 && value != null)
                 {
+                    _player.Attack();
                     foreach (var enemy in _enemiesList)
                         enemy.Die();
 
@@ -36,11 +38,6 @@ namespace Assets.Script.Nodes.Core
             _allMoveInteraction = GetComponentsInChildren<MoveInteraction>(true);
         }
 
-        private void Start()
-        {
-
-        }
-
         public IEnumerator Initialize()
         {
             Conections.Add(Directions.Foward, null);
@@ -50,7 +47,7 @@ namespace Assets.Script.Nodes.Core
 
             yield return StartCoroutine
                 (CheckAllDirections());
-            yield return StartCoroutine(ReavaliateDirectionInteraction());
+            yield return StartCoroutine(SetInteractionConection());
         }
 
         private IEnumerator CheckAllDirections()
@@ -76,7 +73,7 @@ namespace Assets.Script.Nodes.Core
             }
         }
 
-        private IEnumerator ReavaliateDirectionInteraction()
+        private IEnumerator SetInteractionConection()
         {
             foreach (MoveInteraction interaction in _allMoveInteraction)
             {
@@ -126,7 +123,11 @@ namespace Assets.Script.Nodes.Core
         public void AddEnemy(Pawn enemy)
         {
             _enemiesList.Add(enemy);
-            if (Player != null) Player.Die();
+            if (Player != null)
+            {
+                Player.Die();
+                enemy.Attack();
+            }
         }
 
         public void RemoveEnemy(Pawn enemy)

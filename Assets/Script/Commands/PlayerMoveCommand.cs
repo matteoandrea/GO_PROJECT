@@ -1,30 +1,23 @@
-﻿using Assets.Script.Manager;
-using Assets.Script.Pawns;
-using DG.Tweening;
-using System.Collections;
+﻿using DG.Tweening;
 using UnityEngine;
-using UnityEngine.AI;
+using System.Linq;
 
 namespace Assets.Script.Commands
 {
-    public class PlayerMoveCommand : ICommand
+    public class PlayerMoveCommand : MoveCommand
     {
-        private Transform _transform { get; set; }
-        private Vector3 _targetPosition { get; set; }
-        private Animator _animator { get; set; }
-        private float _speedWalk { get; set; }
-        private float _speedRotation { get; set; }
+        public PlayerMoveCommand(
+            Vector3 targetPosition,
+            float speedWalk,
+            float speedRotation,
+            Transform transform,
+            Animator animator)
+            : base(targetPosition, speedWalk,
+                  speedRotation, transform, animator)
+        { }
 
-        public PlayerMoveCommand(Vector3 targetPosition, float speedWalk, float speedRotation, Transform transform, Animator animator)
-        {
-            _transform = transform;
-            _targetPosition = targetPosition;
-            _animator = animator;
-            _speedWalk = speedWalk;
-            _speedRotation = speedRotation;
-        }
 
-        public void Execute()
+        public override void Execute()
         {
             _animator.SetBool("Walking", true);
 
