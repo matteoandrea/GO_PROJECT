@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-namespace Assets.Script.Command
+namespace Assets.Script.Commands
 {
     public interface ICommand
     {

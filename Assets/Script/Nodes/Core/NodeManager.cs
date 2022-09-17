@@ -1,30 +1,28 @@
 using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace Assets.Script.Nodes.Core
 {
-    public class NodeManager : MonoBehaviour
+    internal class NodeManager : MonoBehaviour
     {
-        public NodeCore[] nodes;
+        public BaseNode[] NodesArray { get; set; }
 
         private void Awake()
         {
-            nodes = GetComponentsInChildren<NodeCore>();
+            NodesArray = GetComponentsInChildren<BaseNode>();
         }
 
         private void Start()
         {
+            Debug.Log(NodesArray.Length);
             StartCoroutine(Inicialization());
         }
 
         private IEnumerator Inicialization()
         {
-            foreach (var node in nodes)
-            {
-                node.CheckAllDirections();
-                yield return new WaitForEndOfFrame();
-            }
+            foreach (var node in NodesArray)
+                yield return node.Initialize();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Assets.Script.Command;
+﻿using Assets.Script.Commands;
 using Assets.Script.Pawns.Core;
 using System.Collections;
 using UnityEngine;

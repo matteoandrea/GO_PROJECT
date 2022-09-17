@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Assets.Script.Input;
-using Assets.Script.Manager;
 using Assets.Script.Pawns.Core;
 using Assets.Script.Nodes.Core;
-using Assets.Script.Command;
+using Assets.Script.Commands;
+using Assets.Script.Interactions;
 
 namespace Assets.Script.Pawns.Player
 {
@@ -17,14 +17,14 @@ namespace Assets.Script.Pawns.Player
 
         private void OnEnable()
         {
-            _inputReader.clickEvent += ChooseAction;
+            _inputReader.clickEvent += Interact;
             _inputReader.mousePositionEvent += OnMousePositon;
             _gameManagerProxy.startPlayerTurnEvent += OnStartTurn;
         }
 
         private void OnDisable()
         {
-            _inputReader.clickEvent -= ChooseAction;
+            _inputReader.clickEvent -= Interact;
             _inputReader.mousePositionEvent -= OnMousePositon;
             _gameManagerProxy.startPlayerTurnEvent -= OnStartTurn;
         }
@@ -35,37 +35,38 @@ namespace Assets.Script.Pawns.Player
             base.Awake();
         }
 
-        protected override void OnEnterNode(NodeCore node)
+        protected override void OnEnterNode(BaseNode node)
         {
 
         }
 
-        protected override void OnExitNode(NodeCore node)
+        protected override void OnExitNode(BaseNode node)
         {
 
         }
 
         protected override void OnStartTurn()
         {
-            _currentNode.EnableArrows();
+            _currentNode.PlayerStartTurn();
         }
 
-        private void ChooseAction()
+        private void Interact()
         {
             Ray ray = _cam.ScreenPointToRay(_mousePosition);
 
             if (!Physics.Raycast(ray, out RaycastHit hit, _interactMask)) return;
 
-            var script = hit.collider.GetComponent<Arrow>();
-            if (script != null) MoveAction(script);
+
+
+            var script = hit.collider.GetComponent<IInteract>();
+            if (script != null) script.ExecuteInteraction(this);
         }
 
         private void OnMousePositon(Vector2 pos) => _mousePosition = pos;
 
-        private void MoveAction(Arrow arrow)
+        public void MoveAction(Vector3 targetPosition)
         {
-            var target = arrow.GetNodeConnection();
-            ICommand command = new PlayerMoveCommand(target, transform, _animator);
+            ICommand command = new PlayerMoveCommand(targetPosition, _walkSpeed, _rotationSpeed, transform, _animator);
             _gameManagerProxy.AddCommand(command);
         }
 

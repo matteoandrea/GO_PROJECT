@@ -23,12 +23,12 @@ namespace Assets.Script.Pawns.Enemy
             }
         }
 
-        protected override void OnEnterNode(NodeCore node)
+        protected override void OnEnterNode(BaseNode node)
         {
             throw new System.NotImplementedException();
         }
 
-        protected override void OnExitNode(NodeCore node)
+        protected override void OnExitNode(BaseNode node)
         {
             throw new System.NotImplementedException();
         }

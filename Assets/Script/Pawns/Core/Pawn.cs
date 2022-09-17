@@ -1,26 +1,29 @@
-﻿using Assets.Script.Command;
-using Assets.Script.Manager;
+﻿using Assets.Script.Manager;
 using Assets.Script.Nodes.Core;
-using System.Collections;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
-        [SerializeField] protected GameManagerProxy _gameManagerProxy;
+        [SerializeField]
+        protected float _walkSpeed, _rotationSpeed;
+        [SerializeField]
+        protected GameManagerProxy _gameManagerProxy;
+        [Space(10)]
+ 
 
-        [SerializeField]protected NodeCore _currentNode;
-        protected Animator _animator;
+        [SerializeField]
+        protected BaseNode _currentNode;
+        protected Animator _animator { get; set; }
 
         protected virtual void Awake()
         {
             _animator = GetComponent<Animator>();
         }
 
-        protected abstract void OnEnterNode(NodeCore node);
-        protected abstract void OnExitNode(NodeCore node);
+        protected abstract void OnEnterNode(BaseNode node);
+        protected abstract void OnExitNode(BaseNode node);
         protected abstract void OnStartTurn();
 
         public virtual void Die() => _animator.SetTrigger("Die");
@@ -29,7 +32,7 @@ namespace Assets.Script.Pawns.Core
         private void OnTriggerEnter(Collider hit)
         {
             if (!hit.CompareTag("Node")) return;
-            var node = hit.GetComponent<NodeCore>();
+            var node = hit.GetComponent<BaseNode>();
             _currentNode = node;
             OnEnterNode(node);
         }
@@ -37,7 +40,7 @@ namespace Assets.Script.Pawns.Core
         private void OnTriggerExit(Collider hit)
         {
             if (!hit.CompareTag("Node")) return;
-            var node = hit.GetComponent<NodeCore>(); ;
+            var node = hit.GetComponent<BaseNode>(); ;
             OnExitNode(node);
             _currentNode = null;
         }

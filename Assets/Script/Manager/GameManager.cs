@@ -1,7 +1,7 @@
 using Assets.Script.Input;
 using Assets.Script.STM;
 using Assets.Script.STM.Core;
-using Assets.Script.Command;
+using Assets.Script.Commands;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
