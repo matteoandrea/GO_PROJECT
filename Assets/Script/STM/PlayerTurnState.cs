@@ -7,31 +7,29 @@ namespace Assets.Script.STM
 {
     public class PlayerTurnState : State
     {
-        public PlayerTurnState(StateMachine stateMachine) : base(stateMachine) { }
+        public PlayerTurnState(StateMachine stateMachine) : base(stateMachine) => StateType = StateTypeEnum.PlayerState;
 
         private GameManager _manager;
 
         public override IEnumerator OnEnterState()
         {
-            Debug.Log("player  State");
             _manager = StateMachine.GetComponent<GameManager>();
-            _manager.inputReader.EnableGameplayInput();
 
-            _manager.playerMovedEvent.OnEventRaised += ProcessMove;
+            if (_manager.GameLost)
+            {
+                StateMachine.SetState(new WinState(StateMachine));
+                return base.OnEnterState();
+            }
+            
+            _manager.InvokeOnStartPlayerTurn();
+            _manager.SetPlayerInput(true);
 
             return base.OnEnterState();
         }
 
-        private void ProcessMove()
-        {
-            _manager.playerMovedEvent.OnEventRaised -= ProcessMove;
-            StateMachine.SetState(new EnemyTurnState(StateMachine));
-        }
-
         public override IEnumerator OnExitState()
         {
-            Debug.Log("Exit Player  State");
-            _manager.inputReader.DisableAll();
+            _manager.SetPlayerInput(false);
             return base.OnExitState();
         }
     }
