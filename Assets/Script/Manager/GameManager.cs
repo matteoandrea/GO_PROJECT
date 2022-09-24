@@ -1,7 +1,7 @@
 using Assets.Script.Input;
 using Assets.Script.STM;
 using Assets.Script.STM.Core;
-using Assets.Script.Command;
+using Assets.Script.Commands;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,19 +22,19 @@ namespace Assets.Script.Manager
 
         private void Awake()
         {
-            commandQueue = new Queue<ICommand>();
-            _proxy.GameManager = this;
+           
         }
 
         private void Start()
         {
+            commandQueue = new Queue<ICommand>();
+            _proxy.GameManager = this;
             SetState(new BeginState(this));
         }
 
         public void InvokeOnStartPlayerTurn() => _proxy.OnStartPlayerTurn();
 
         public void InvokeOnStartEnemyTurn() => _proxy.OnStartEnemyTurn();
-
 
         public void SetPlayerInput(bool e)
         {
@@ -63,6 +63,7 @@ namespace Assets.Script.Manager
         }
 
         public void AddEnemy(Pawn enemy) => enemyList.Add(enemy);
+
         public void RemoveEnemy(Pawn enemy) => enemyList.Remove(enemy);
 
     }

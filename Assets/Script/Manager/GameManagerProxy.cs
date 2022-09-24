@@ -1,5 +1,6 @@
-﻿using Assets.Script.Command;
+﻿using Assets.Script.Commands;
 using Assets.Script.Pawns.Core;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,7 +19,6 @@ namespace Assets.Script.Manager
         public event UnityAction startEnemyTurnEvent;
 
         public void AddCommand(ICommand command) => GameManager.AddCommand(command);
-
 
         public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
         public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();

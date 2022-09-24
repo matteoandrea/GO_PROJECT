@@ -1,7 +1,7 @@
-using Assets.Script.A.NodeLogic;
-using Assets.Script.A.PathFindingLogic;
+using Assets.Script.Commands;
 using Assets.Script.Input;
 using Assets.Script.Manager;
+using Assets.Script.Nodes.Core;
 using Assets.Script.Pawns.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,42 +11,39 @@ namespace Assets.Script.Pawns.Enemy
 {
     public abstract class EnemyBase : Pawn
     {
-        [SerializeField] private GameManagerProxy _managerProxy = default;
+        [SerializeField]
+        protected LayerMask _incluedlayerMask;
 
-        public Transform target;
-        public Vector3[] currentPath;
-        public PathRequestManagerProxy pathProxy;
-        public int currentWaypoint;
+        protected virtual void OnEnable()
+            => _gameManagerProxy.startEnemyTurnEvent += OnStartTurn;
 
-        protected virtual void OnEnable() =>
-            _managerProxy.startEnemyTurnEvent += ThinkToAct;
+        protected virtual void OnDisable()
+            => _gameManagerProxy.startEnemyTurnEvent -= OnStartTurn;
 
-        protected virtual void OnDisable() =>
-            _managerProxy.startEnemyTurnEvent -= ThinkToAct;
+        private void Start() => _gameManagerProxy.AddEnemy(this);
 
-        protected virtual void Start() => _managerProxy.AddEnemy(this);
-
-        protected abstract void ThinkToAct();
-
-        protected void CalculatePath(Vector3[] newPath, bool pathSuccessful)
+        public override void MoveAction(Vector3 targetPosition)
         {
-            if (pathSuccessful) currentPath = newPath;
+            ICommand command = new EnemyMoveCommand(
+                targetPosition,
+                _walkSpeed,
+                _rotationSpeed,
+                transform,
+                _animator,
+                _incluedlayerMask);
+            _gameManagerProxy.AddCommand(command);
         }
 
-        private void OnTriggerEnter(Collider hit)
+        protected override void OnEnterNode(BaseNode node)
+            => node.AddEnemy(this);
+
+        protected override void OnExitNode(BaseNode node)
+            => node.RemoveEnemy(this);
+
+        public override void Die()
         {
-            if (hit.tag != "Node") return;
-
-            _nodeInteraction = hit.GetComponent<NodeInteraction>();
-            _nodeInteraction.AddEnemyToList(this);
-        }
-
-        private void OnTriggerExit(Collider hit)
-        {
-            if (hit.tag != "Node") return;
-
-            _nodeInteraction = hit.GetComponent<NodeInteraction>();
-            _nodeInteraction.RemoveEnemyFromList(this);
+            base.Die();
+            _gameManagerProxy.RemoveEnemy(this);
         }
     }
 }

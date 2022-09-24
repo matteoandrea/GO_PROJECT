@@ -1,30 +1,25 @@
-﻿using Assets.Script.A.PathFindingLogic;
-using System.Collections;
-using System.Linq;
+﻿using Assets.Script.Commands;
+using Assets.Script.Nodes.Core;
 using UnityEngine;
 
 namespace Assets.Script.Pawns.Enemy
 {
     public class GhostEnemy : EnemyBase
     {
-        protected override void Start()
+        protected override void OnStartTurn()
         {
-            base.Start();
-            pathProxy.RequestPath(transform.position, target.position, CalculatePath);
-        }
-
-        protected override void ThinkToAct()
-        {
-            if (currentWaypoint >= currentPath.Length - 1)
+            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
+                                 _incluedlayerMask))
             {
-                currentPath.Reverse();
-                currentWaypoint = 0;
+                var script = hit.collider.GetComponent<BaseNode>();
+                if (script != null)
+                    MoveAction(hit.transform.position);
             }
-
-            currentWaypoint++;
-            _targetPosition = currentPath[currentWaypoint];
-
-            MoveAction();
+            else
+            {
+                ICommand command = new RotateCommand(transform, _rotationSpeed);
+                _gameManagerProxy.AddCommand(command);
+            }
         }
     }
 }

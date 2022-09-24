@@ -13,8 +13,6 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
-            Debug.Log($"Entrou{StateType}");
-
             _manager = StateMachine.GetComponent<GameManager>();
 
             if (_manager.enemyList.Count <= 0)

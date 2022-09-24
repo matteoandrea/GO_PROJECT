@@ -1,32 +1,49 @@
-﻿using Assets.Script.A;
-using Assets.Script.A.NodeLogic;
-using Assets.Script.Command;
-using Assets.Script.Manager;
-using System.Collections;
+﻿using Assets.Script.Manager;
+using Assets.Script.Nodes.Core;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
-        [HideInInspector] public Node currentNode;
+        [SerializeField]
+        protected float _walkSpeed, _rotationSpeed;
+        [SerializeField]
+        protected GameManagerProxy _gameManagerProxy;
+        [Space(10)]
 
-        [SerializeField] protected GameManagerProxy _gameManagerProxy;
-
-        protected Animator _animator;
-        protected Vector3 _targetPosition;
-        protected NodeInteraction _nodeInteraction;
+        [SerializeField]
+        protected BaseNode _currentNode;
+        protected Animator _animator { get; set; }
 
         protected virtual void Awake()
+            => _animator = GetComponent<Animator>();
+
+        protected abstract void OnEnterNode(BaseNode node);
+        protected abstract void OnExitNode(BaseNode node);
+        protected abstract void OnStartTurn();
+        public abstract void MoveAction(Vector3 targetPosition);
+
+        public virtual void Die() =>
+            _animator.SetTrigger("Die");
+
+        public virtual void Attack() =>
+            _animator.SetTrigger("Attack");
+
+        private void OnTriggerEnter(Collider hit)
         {
-            _animator = GetComponent<Animator>();
+            if (!hit.CompareTag("Node")) return;
+            var node = hit.GetComponent<BaseNode>();
+            _currentNode = node;
+            OnEnterNode(node);
         }
 
-        protected virtual void MoveAction()
+        private void OnTriggerExit(Collider hit)
         {
-            ICommand command = new MoveCommand(_targetPosition, transform, _animator);
-            _gameManagerProxy.AddCommand(command);
+            if (!hit.CompareTag("Node")) return;
+            var node = hit.GetComponent<BaseNode>(); ;
+            OnExitNode(node);
+            _currentNode = null;
         }
     }
 }
