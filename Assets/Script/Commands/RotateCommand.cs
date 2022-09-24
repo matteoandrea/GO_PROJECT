@@ -27,8 +27,6 @@ namespace Assets.Script.Commands
                        * 180, _rotationSpeed, RotateMode.LocalAxisAdd);
             else _transform.DORotate(Vector3.up
                         * 180, _rotationSpeed, RotateMode.LocalAxisAdd);
-
-
         }
     }
 }

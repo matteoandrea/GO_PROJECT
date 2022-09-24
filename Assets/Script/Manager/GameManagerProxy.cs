@@ -20,7 +20,6 @@ namespace Assets.Script.Manager
 
         public void AddCommand(ICommand command) => GameManager.AddCommand(command);
 
-
         public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
         public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();
 

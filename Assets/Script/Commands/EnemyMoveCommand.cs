@@ -43,6 +43,14 @@ namespace Assets.Script.Commands
                 ICommand command = new RotateCommand(_transform, _speedRotation);
                 command.Execute();
             }
+            else
+            {
+                var script = hit.collider.GetComponent<BaseNode>();
+                if (script == null) return;
+
+               // ICommand command = new RotateCommand(_transform, _speedRotation);
+                //command.Execute();
+            }
         }
     }
 }
