@@ -107,9 +107,7 @@ namespace Assets.Script.Nodes.Core
         public void PlayerStartTurn()
         {
             foreach (var moveInteraction in _allMoveInteraction)
-            {
                 moveInteraction.SetArrowState(true);
-            }
         }
 
         public void PlayerEndTurn()

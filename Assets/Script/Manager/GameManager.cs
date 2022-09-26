@@ -20,11 +20,6 @@ namespace Assets.Script.Manager
 
         public List<Pawn> enemyList;
 
-        private void Awake()
-        {
-           
-        }
-
         private void Start()
         {
             commandQueue = new Queue<ICommand>();

@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _direction: 1
-  _lineAnimationSpeed: 0.35
+  _lineAnimationSpeed: 0.15
 --- !u!1 &2567580053565868380
 GameObject:
   m_ObjectHideFlags: 0
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _direction: 2
-  _lineAnimationSpeed: 0.35
+  _lineAnimationSpeed: 0.15
 --- !u!1 &4153555146369655916
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +524,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _direction: 3
-  _lineAnimationSpeed: 0.35
+  _lineAnimationSpeed: 0.15
 --- !u!1 &4590323129258585587
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _direction: 0
-  _lineAnimationSpeed: 0.35
+  _lineAnimationSpeed: 0.15
 --- !u!1 &9028375673597679804
 GameObject:
   m_ObjectHideFlags: 0

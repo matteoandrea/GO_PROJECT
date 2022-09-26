@@ -10,7 +10,7 @@ namespace Assets.Script.STM
 
         public override IEnumerator OnEnterState()
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(4.3f);
             StateMachine.SetState(new ProcessState(StateMachine));
         }
     }
