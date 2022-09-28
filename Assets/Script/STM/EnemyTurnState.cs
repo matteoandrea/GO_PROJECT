@@ -9,20 +9,22 @@ namespace Assets.Script.STM
     {
         public EnemyTurnState(StateMachine stateMachine) : base(stateMachine) => StateType = StateTypeEnum.EnemyState;
 
-        private GameManager _manager;
+        private GameManager manager;
 
         public override IEnumerator OnEnterState()
         {
-            _manager = StateMachine.GetComponent<GameManager>();
+            manager = StateMachine.GetComponent<GameManager>();
 
-            if (_manager.enemyList.Count <= 0)
+            if (manager.EnemyList.Count > 0)
+            {
+                manager.InvokeOnStartEnemyTurn();
+                yield break;
+            }
+            else
             {
                 StateMachine.SetState(new PlayerTurnState(StateMachine));
                 yield break;
             }
-
-            _manager._proxy.OnStartEnemyTurn();
-            yield break;
         }
     }
 }

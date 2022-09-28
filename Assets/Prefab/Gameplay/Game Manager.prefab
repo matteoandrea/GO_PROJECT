@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c33921b88a5824443959eb431ba74b4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _inputReader: {fileID: 11400000, guid: 86af0d908b5ab324d9f57e0a7597de76, type: 2}
-  _proxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
-  enemyList: []
+  inputReader: {fileID: 11400000, guid: 86af0d908b5ab324d9f57e0a7597de76, type: 2}
+  nodeManager: {fileID: 0}
+  ProxyManager: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
+  EnemyList: []

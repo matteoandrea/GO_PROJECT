@@ -51,7 +51,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1833198147495145378
 Transform:
   m_ObjectHideFlags: 0
@@ -131,14 +131,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11b4cc6b3e968554eb04a7c0e0593ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walkSpeed: 0.9
-  _rotationSpeed: 0.2
-  _gameManagerProxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
-  _currentNode: {fileID: 0}
-  _incluedlayerMask:
+  walkSpeed: 0.9
+  rotationSpeed: 0.2
+  gameManagerProxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
+  incluedLayerMask:
     serializedVersion: 2
     m_Bits: 72
-  _playerLayer:
+  playerLayerMask:
     serializedVersion: 2
     m_Bits: 256
 --- !u!1 &1833198147495375748

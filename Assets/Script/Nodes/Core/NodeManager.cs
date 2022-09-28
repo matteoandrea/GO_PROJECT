@@ -10,9 +10,7 @@ namespace Assets.Script.Nodes.Core
 
         private void Awake() => NodesArray = GetComponentsInChildren<BaseNode>();
 
-        private void Start() => StartCoroutine(Inicialization());
-
-        private IEnumerator Inicialization()
+        public IEnumerator Inicialization()
         {
             foreach (var node in NodesArray)
                 yield return node.Initialize();
