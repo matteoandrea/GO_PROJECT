@@ -90,7 +90,7 @@ namespace Assets.Script.Manager
             CommandQueue.Clear();
 
             yield return new WaitForSeconds(1.2f);
-            yield return new WaitForSeconds();
+            //yield return new WaitForSeconds();
 
             switch (gameStatus)
             {

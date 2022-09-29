@@ -24,7 +24,7 @@ namespace Assets.Script.Commands
             this.animator = animator;
         }
 
-        public async UniTaskVoid Execute()
+        public IEnumerator Execute()
         {
             animator.SetBool("Walking", true);
 
@@ -37,8 +37,8 @@ namespace Assets.Script.Commands
                     animator.SetBool("Walking", false);
                 });
 
-            await UniTask.Delay(TimeSpan.FromSeconds(sequence.Duration()));
-            //yield return new WaitForSeconds(sequence.Duration());
+            // await UniTask.Delay(TimeSpan.FromSeconds(sequence.Duration()));
+            yield return new WaitForSeconds(sequence.Duration());
         }
     }
 }
