@@ -1,25 +1,17 @@
-﻿using Assets.Script.Commands;
-using Assets.Script.Nodes.Core;
-using UnityEngine;
-
-namespace Assets.Script.Pawns.Enemy
+﻿namespace Assets.Script.Pawns.Enemy
 {
     public class GhostEnemy : EnemyBase
     {
         protected override void OnStartTurn()
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
-                                 _incluedlayerMask))
-            {
-                var script = hit.collider.GetComponent<BaseNode>();
-                if (script != null)
-                    MoveAction(hit.transform.position);
-            }
+            var value = IsNodeInSight();
+
+            if (value.Item1)
+                MoveAction(value.Item2);
             else
-            {
-                ICommand command = new RotateCommand(transform, _rotationSpeed);
-                _gameManagerProxy.AddCommand(command);
-            }
+                Rotate();
+
+            gameManagerProxy.AddCommandPlaylist(commandPlayList);
         }
     }
 }

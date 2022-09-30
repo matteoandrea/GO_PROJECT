@@ -1,27 +1,17 @@
-﻿using Assets.Script.Commands;
-using Assets.Script.Nodes.Core;
-using System.Collections;
-using UnityEngine;
-
-namespace Assets.Script.Pawns.Enemy
+﻿namespace Assets.Script.Pawns.Enemy
 {
     public class GuardEnemy : EnemyBase
     {
-        [SerializeField]
-        private LayerMask _playerLayer;
-
         protected override void OnStartTurn()
         {
-            if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
-                                 _playerLayer))
-            {
-                MoveAction(hit.transform.position);
-            }
+            var values = IsPLayerNear();
+
+            if (values.Item1)
+                MoveAction(values.Item2);
             else
-            {
-              // ICommand command = new RotateCommand(transform, _rotationSpeed);
-              //  _gameManagerProxy.AddCommand(command);
-            }
+                Pass();
+
+            gameManagerProxy.AddCommandPlaylist(commandPlayList);
         }
     }
 }

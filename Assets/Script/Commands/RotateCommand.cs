@@ -1,5 +1,8 @@
-﻿using DG.Tweening;
+﻿using Assets.Script.Commands.Core;
+using Assets.Script.Nodes.Core;
+using DG.Tweening;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,23 +13,25 @@ namespace Assets.Script.Commands
 {
     internal class RotateCommand : ICommand
     {
-        private Transform _transform;
-        private float _rotationSpeed;
+        private Transform transform;
+        private float rotationSpeed;
 
         public RotateCommand(Transform transform, float rotationSpeed)
         {
-            _transform = transform;
-            _rotationSpeed = rotationSpeed;
+            this.transform = transform;
+            this.rotationSpeed = rotationSpeed;
         }
 
-        public void Execute()
+        public IEnumerator Execute()
         {
-            var y = _transform.localRotation.eulerAngles.y;
+            var y = transform.localRotation.eulerAngles.y;
             if (y == 180)
-                _transform.DORotate(Vector3.down
-                       * 180, _rotationSpeed, RotateMode.LocalAxisAdd);
-            else _transform.DORotate(Vector3.up
-                        * 180, _rotationSpeed, RotateMode.LocalAxisAdd);
+                transform.DORotate(Vector3.down
+                       * 180, rotationSpeed, RotateMode.LocalAxisAdd);
+            else transform.DORotate(Vector3.up
+                        * 180, rotationSpeed, RotateMode.LocalAxisAdd);
+
+            yield return new WaitForSeconds(rotationSpeed);
         }
     }
 }

@@ -10,33 +10,31 @@ namespace Assets.Script.Nodes.Core
     public class BaseNode : MonoBehaviour
     {
         public Dictionary<Directions, BaseNode> Conections = new();
-        private Pawn _player;
+        private Pawn player;
         public Pawn Player
         {
-            get { return _player; }
+            get { return player; }
             set
             {
-                _player = value;
+                player = value;
 
-                if (_enemiesList.Count > 0 && value != null)
+                if (enemiesList.Count > 0 && value != null)
                 {
-                    _player.Attack();
-                    foreach (var enemy in _enemiesList)
-                        enemy.Die();
+                    player.Attack();
+                    foreach (var enemy in enemiesList)
+                        StartCoroutine(enemy.Die());
 
-                    _enemiesList.Clear();
+                    enemiesList.Clear();
                 }
             }
         }
-        private List<Pawn> _enemiesList = new();
+        private List<Pawn> enemiesList = new();
 
-        [SerializeField] private LayerMask _incluedlayerMask;
-        private MoveInteraction[] _allMoveInteraction { get; set; }
+        [SerializeField]
+        private LayerMask incluedlayerMask;
+        private MoveInteraction[] allMoveInteraction { get; set; }
 
-        private void Awake()
-        {
-            _allMoveInteraction = GetComponentsInChildren<MoveInteraction>(true);
-        }
+        private void Awake() => allMoveInteraction = GetComponentsInChildren<MoveInteraction>(true);
 
         public IEnumerator Initialize()
         {
@@ -45,9 +43,8 @@ namespace Assets.Script.Nodes.Core
             Conections.Add(Directions.Left, null);
             Conections.Add(Directions.Right, null);
 
-            yield return StartCoroutine
-                (CheckAllDirections());
-            yield return StartCoroutine(SetInteractionConection());
+            yield return CheckAllDirections();
+            yield return SetInteractionConection();
         }
 
         private IEnumerator CheckAllDirections()
@@ -55,7 +52,7 @@ namespace Assets.Script.Nodes.Core
             List<Directions> keys = new(Conections.Keys);
             foreach (var key in keys)
             {
-                yield return StartCoroutine(CheckDirection(key));
+                yield return CheckDirection(key);
             }
         }
 
@@ -64,7 +61,7 @@ namespace Assets.Script.Nodes.Core
             var direction = ChooseDirection(key);
 
             if (Physics.Raycast(transform.position,
-                direction, out var hit, Mathf.Infinity, _incluedlayerMask))
+                direction, out var hit, Mathf.Infinity, incluedlayerMask))
             {
                 if (!hit.transform.TryGetComponent<BaseNode>
                     (out var connectedNode)) yield break;
@@ -75,7 +72,7 @@ namespace Assets.Script.Nodes.Core
 
         private IEnumerator SetInteractionConection()
         {
-            foreach (MoveInteraction interaction in _allMoveInteraction)
+            foreach (MoveInteraction interaction in allMoveInteraction)
             {
                 interaction.SetMoveNode(Conections);
                 yield return null;
@@ -106,13 +103,13 @@ namespace Assets.Script.Nodes.Core
 
         public void PlayerStartTurn()
         {
-            foreach (var moveInteraction in _allMoveInteraction)
+            foreach (var moveInteraction in allMoveInteraction)
                 moveInteraction.SetArrowState(true);
         }
 
         public void PlayerEndTurn()
         {
-            foreach (var moveInteraction in _allMoveInteraction)
+            foreach (var moveInteraction in allMoveInteraction)
             {
                 moveInteraction.SetArrowState(false);
             }
@@ -120,17 +117,17 @@ namespace Assets.Script.Nodes.Core
 
         public void AddEnemy(Pawn enemy)
         {
-            _enemiesList.Add(enemy);
+            enemiesList.Add(enemy);
             if (Player != null)
             {
-                Player.Die();
+                StartCoroutine(Player.Die());
                 enemy.Attack();
             }
         }
 
         public void RemoveEnemy(Pawn enemy)
         {
-            if (_enemiesList.Contains(enemy)) _enemiesList.Remove(enemy);
+            if (enemiesList.Contains(enemy)) enemiesList.Remove(enemy);
         }
 
     }

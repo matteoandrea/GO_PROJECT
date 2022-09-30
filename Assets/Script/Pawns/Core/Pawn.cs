@@ -1,40 +1,64 @@
-﻿using Assets.Script.Manager;
+﻿using Assets.Script.Commands;
+using Assets.Script.Commands.Core;
+using Assets.Script.Manager;
 using Assets.Script.Nodes.Core;
+using System.Collections;
 using UnityEngine;
 
 namespace Assets.Script.Pawns.Core
 {
     public abstract class Pawn : MonoBehaviour
     {
+        protected CommandPlayList commandPlayList = new();
+
         [SerializeField]
-        protected float _walkSpeed, _rotationSpeed;
+        protected float walkSpeed = .9f, rotationSpeed = .2f;
+
         [SerializeField]
-        protected GameManagerProxy _gameManagerProxy;
+        protected GameManagerProxy gameManagerProxy;
+
         [Space(10)]
 
-        [SerializeField]
-        protected BaseNode _currentNode;
-        protected Animator _animator { get; set; }
+        protected BaseNode currentNode;
+        protected Animator animator { get; set; }
+
+        private Collider Collider;
 
         protected virtual void Awake()
-            => _animator = GetComponent<Animator>();
+        {
+            animator = GetComponent<Animator>();
+            Collider = GetComponent<Collider>();
+        }
 
         protected abstract void OnEnterNode(BaseNode node);
         protected abstract void OnExitNode(BaseNode node);
         protected abstract void OnStartTurn();
-        public abstract void MoveAction(Vector3 targetPosition);
+        protected void MoveAction(Vector3 targetPosition)
+        {
+            ICommand command = new MoveCommand(
+           targetPosition,
+           walkSpeed,
+           rotationSpeed,
+           transform,
+           animator);
 
-        public virtual void Die() =>
-            _animator.SetTrigger("Die");
+            commandPlayList.AddCommand(command);
+        }
 
-        public virtual void Attack() =>
-            _animator.SetTrigger("Attack");
+        public virtual IEnumerator Die()
+        {
+            animator.SetTrigger("Die");
+            Collider.enabled = false;
+            yield return new WaitForSeconds(1.1f);
+        }
+
+        public virtual void Attack() => animator.SetTrigger("Attack");
 
         private void OnTriggerEnter(Collider hit)
         {
             if (!hit.CompareTag("Node")) return;
             var node = hit.GetComponent<BaseNode>();
-            _currentNode = node;
+            currentNode = node;
             OnEnterNode(node);
         }
 
@@ -43,7 +67,7 @@ namespace Assets.Script.Pawns.Core
             if (!hit.CompareTag("Node")) return;
             var node = hit.GetComponent<BaseNode>(); ;
             OnExitNode(node);
-            _currentNode = null;
+            currentNode = null;
         }
     }
 }

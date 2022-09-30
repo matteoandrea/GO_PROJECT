@@ -1334,12 +1334,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f523ca26e16df674bb43a2f744c9b2cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _walkSpeed: 0.9
-  _rotationSpeed: 0.2
-  _gameManagerProxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
-  _currentNode: {fileID: 0}
-  _inputReader: {fileID: 11400000, guid: 86af0d908b5ab324d9f57e0a7597de76, type: 2}
-  _interactMask:
+  walkSpeed: 0.9
+  rotationSpeed: 0.2
+  gameManagerProxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
+  inputReader: {fileID: 11400000, guid: 86af0d908b5ab324d9f57e0a7597de76, type: 2}
+  interactMask:
     serializedVersion: 2
     m_Bits: 128
 --- !u!1 &5059724807717583547

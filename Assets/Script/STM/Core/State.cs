@@ -10,8 +10,8 @@ namespace Assets.Script.STM.Core
 
         public State(StateMachine stateMachine) => StateMachine = stateMachine;
 
-        public virtual IEnumerator OnEnterState() { Debug.Log($"Enter State: {StateType}"); yield break; }
+        public virtual IEnumerator OnEnterState() { yield break; }
         public virtual IEnumerator OnUpdateState() { yield break; }
-        public virtual IEnumerator OnExitState() { Debug.Log($"Exit State: {StateType}");  yield break; }
+        public virtual IEnumerator OnExitState() { yield break; }
     }
 }

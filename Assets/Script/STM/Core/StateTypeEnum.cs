@@ -5,8 +5,7 @@
         BeginState,
         PlayerState,
         EnemyState,
-        ProcessState,
         WinState,
-        LoseState
+        LostState
     }
 }
