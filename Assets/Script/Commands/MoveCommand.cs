@@ -9,11 +9,11 @@ namespace Assets.Script.Commands
 {
     public class MoveCommand : ICommand
     {
-        protected Transform transform { get; set; }
-        protected Vector3 targetPosition { get; set; }
-        protected Animator animator { get; set; }
-        protected float speedWalk { get; set; }
-        protected float speedRotation { get; set; }
+        private Transform transform { get; set; }
+        private Vector3 targetPosition { get; set; }
+        private Animator animator { get; set; }
+        private float speedWalk { get; set; }
+        private float speedRotation { get; set; }
 
         public MoveCommand(Vector3 targetPosition, float speedWalk, float speedRotation, Transform transform, Animator animator)
         {
@@ -37,7 +37,6 @@ namespace Assets.Script.Commands
                     animator.SetBool("Walking", false);
                 });
 
-            // await UniTask.Delay(TimeSpan.FromSeconds(sequence.Duration()));
             yield return new WaitForSeconds(sequence.Duration());
         }
     }

@@ -31,11 +31,11 @@ namespace Assets.Script.Interactions
             if (connections.ContainsKey(_direction))
                 _nodeToMove = connections[_direction];
 
-            if (_nodeToMove == null) return;
+            if (_nodeToMove == null)
+                return;
 
             _lineConnetion.EnableLine();
-            var distance = Mathf.Abs(Vector3.Distance(transform.position, _nodeToMove.transform.position)
-               ) * .5f;
+            var distance = Mathf.Abs(Vector3.Distance(transform.position, _nodeToMove.transform.position)) * .5f;
             StartCoroutine(_lineConnetion.SetLinePath(distance));
         }
 

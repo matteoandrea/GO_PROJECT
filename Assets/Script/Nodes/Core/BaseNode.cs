@@ -43,9 +43,8 @@ namespace Assets.Script.Nodes.Core
             Conections.Add(Directions.Left, null);
             Conections.Add(Directions.Right, null);
 
-            yield return StartCoroutine
-                (CheckAllDirections());
-            yield return StartCoroutine(SetInteractionConection());
+            yield return CheckAllDirections();
+            yield return SetInteractionConection();
         }
 
         private IEnumerator CheckAllDirections()
@@ -53,7 +52,7 @@ namespace Assets.Script.Nodes.Core
             List<Directions> keys = new(Conections.Keys);
             foreach (var key in keys)
             {
-                yield return StartCoroutine(CheckDirection(key));
+                yield return CheckDirection(key);
             }
         }
 

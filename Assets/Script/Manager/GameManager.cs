@@ -33,7 +33,7 @@ namespace Assets.Script.Manager
 
         private IEnumerator Initialize()
         {
-            yield return StartCoroutine(nodeManager.Inicialization());
+            yield return nodeManager.Inicialization();
             SetState(new BeginState(this));
         }
 
@@ -43,8 +43,10 @@ namespace Assets.Script.Manager
 
         public void SetPlayerInput(bool e)
         {
-            if (e) inputReader.EnableGameplayInput();
-            else inputReader.DisableAll();
+            if (e)
+                inputReader.EnableGameplayInput();
+            else
+                inputReader.DisableAll();
         }
 
         public void AddCommandPlaylist(CommandPlayList commands)
@@ -71,7 +73,6 @@ namespace Assets.Script.Manager
             switch (gameStatus)
             {
                 case GameStatus.Running:
-                    //yield return new WaitForSeconds(.2f);
                     SetState(new EnemyTurnState(this));
                     break;
                 case GameStatus.Won:
@@ -90,7 +91,6 @@ namespace Assets.Script.Manager
             CommandQueue.Clear();
 
             yield return new WaitForSeconds(1.2f);
-            //yield return new WaitForSeconds();
 
             switch (gameStatus)
             {

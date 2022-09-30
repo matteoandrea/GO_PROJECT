@@ -10,11 +10,11 @@ namespace Assets.Script.Nodes.core
     {
         [SerializeField]
         private Directions _direction;
+
         [SerializeField]
         private float _lineAnimationSpeed = .35f;
 
         private LineRenderer _lineRenderer { get; set; }
-        private Tween _tween { get; set; }
 
 
         private void Awake()

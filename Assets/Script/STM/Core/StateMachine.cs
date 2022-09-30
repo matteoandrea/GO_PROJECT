@@ -11,7 +11,7 @@ namespace Assets.Script.STM.Core
         public void SetState(State state)
         {
             if (State != null) 
-                StartCoroutine(State.OnExitState());
+                StartCoroutine(State?.OnExitState());
 
             PreviousState = State;
             State = state;
