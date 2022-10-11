@@ -125,6 +125,12 @@ namespace Assets.Script.Nodes.Core
             }
         }
 
+        public void KillPlayer()
+        {
+            if (Player != null)
+                StartCoroutine(Player.Die());
+        }
+
         public void RemoveEnemy(Pawn enemy)
         {
             if (enemiesList.Contains(enemy)) enemiesList.Remove(enemy);

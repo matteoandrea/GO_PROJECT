@@ -19,7 +19,8 @@ namespace Assets.Script.Pawns.Core
 
         [Space(10)]
 
-        protected BaseNode currentNode;
+        [HideInInspector]
+        public BaseNode currentNode;
         protected Animator animator { get; set; }
 
         private Collider Collider;
