@@ -45,13 +45,13 @@ GameObject:
   - component: {fileID: 1833198147495277868}
   - component: {fileID: 1833198147495277869}
   - component: {fileID: 1833198147495277866}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Guard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1833198147495145378
 Transform:
   m_ObjectHideFlags: 0
@@ -134,10 +134,10 @@ MonoBehaviour:
   walkSpeed: 0.9
   rotationSpeed: 0.2
   gameManagerProxy: {fileID: 11400000, guid: b0c616c2db880234eaf0e27cd1877f0f, type: 2}
-  incluedLayerMask:
+  nodeLayerMask:
     serializedVersion: 2
-    m_Bits: 72
-  playerLayerMask:
+    m_Bits: 64
+  pawLayerMask:
     serializedVersion: 2
     m_Bits: 256
 --- !u!1 &1833198147495375748

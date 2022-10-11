@@ -11,7 +11,7 @@ namespace Assets.Script.Pawns.Enemy
     public abstract class EnemyBase : Pawn
     {
         [SerializeField]
-        protected LayerMask incluedLayerMask, playerLayerMask;
+        protected LayerMask nodeLayerMask, pawLayerMask;
 
         protected virtual void OnEnable() => gameManagerProxy.startEnemyTurnEvent += OnStartTurn;
 
@@ -33,7 +33,7 @@ namespace Assets.Script.Pawns.Enemy
             ICommand command = new VerifyRotateCommand(
                 transform,
                 rotationSpeed,
-                incluedLayerMask);
+                nodeLayerMask);
 
             commandPlayList.AddCommand(command);
         }
@@ -45,19 +45,27 @@ namespace Assets.Script.Pawns.Enemy
 
         }
 
-        protected (bool, Vector3) IsPlayerInSight()
+        protected (bool, BaseNode, Vector3) IsPawnInSight(LayerMask layerMask)
         {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
-                                playerLayerMask))
-                return (true, hit.transform.position);
+                                layerMask))
+            {
+                var obj = hit.transform.gameObject;
+                var pawn = obj.GetComponent<Pawn>();
+
+                if (pawn != null)
+                    return (true, pawn.currentNode, hit.transform.position);
+                else
+                    return (false, null, Vector3.one * 1000);
+            }
             else
-                return (false, Vector3.zero);
+                return (false, null, Vector3.one * 1000);
         }
 
         protected (bool, Vector3) IsNodeInSight()
         {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
-                                 incluedLayerMask))
+                                 nodeLayerMask))
             {
                 var script = hit.collider.GetComponent<BaseNode>();
 
@@ -73,7 +81,7 @@ namespace Assets.Script.Pawns.Enemy
         protected (bool, Vector3) IsPLayerNear()
         {
             if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, Mathf.Infinity,
-                                 incluedLayerMask))
+                                 nodeLayerMask))
             {
                 var script = hit.collider.GetComponent<BaseNode>();
 

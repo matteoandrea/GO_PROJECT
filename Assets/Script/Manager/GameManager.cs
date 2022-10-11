@@ -7,6 +7,7 @@ using Assets.Script.Pawns.Core;
 using Assets.Script.Nodes.Core;
 using System.Collections;
 using Assets.Script.Commands.Core;
+using System;
 
 namespace Assets.Script.Manager
 {
@@ -24,6 +25,13 @@ namespace Assets.Script.Manager
 
         public Queue<CommandPlayList> CommandQueue = new();
         public List<Pawn> EnemyList;
+
+        private int commandCount;
+        private Action commandDone;
+
+        private void OnEnable() => commandDone += CommandFinish;
+
+        private void OnDisable() => commandDone -= CommandFinish;
 
         private void Start()
         {
@@ -68,7 +76,7 @@ namespace Assets.Script.Manager
 
         private IEnumerator ExecutePlayerCommands()
         {
-            yield return CommandQueue.Dequeue().Execute();
+            yield return CommandQueue.Dequeue().Execute(null);
 
             switch (gameStatus)
             {
@@ -81,16 +89,19 @@ namespace Assets.Script.Manager
             }
         }
 
+        private void CommandFinish() => commandCount++;
+
         private IEnumerator ExecuteEnemyCommands()
         {
             foreach (var item in CommandQueue)
             {
-                StartCoroutine(item.Execute());
+                StartCoroutine(item.Execute(commandDone));
             }
 
-            CommandQueue.Clear();
+            yield return new WaitUntil(() => commandCount == CommandQueue.Count);
 
-            yield return new WaitForSeconds(1.2f);
+            CommandQueue.Clear();
+            commandCount = 0;
 
             switch (gameStatus)
             {
