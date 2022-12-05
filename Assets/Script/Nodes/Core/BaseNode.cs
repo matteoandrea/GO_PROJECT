@@ -47,6 +47,11 @@ namespace Assets.Script.Nodes.Core
             yield return SetInteractionConection();
         }
 
+        public bool IsAnyPawnInside()
+        {
+            return enemiesList.Count > 0 || player != null;
+        }
+
         private IEnumerator CheckAllDirections()
         {
             List<Directions> keys = new(Conections.Keys);

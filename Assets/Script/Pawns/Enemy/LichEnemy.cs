@@ -17,16 +17,13 @@ namespace Assets.Script.Pawns.Enemy
 
         protected override void OnStartTurn()
         {
-            var value = IsPawnInSight(pawLayerMask);
+            var value = IsPawnInSight(nodeLayerMask);
 
             var pos = line.GetPosition(1);
-            pos.z = value.Item3.z;
+            pos.z = value.Item2.z;
             line.SetPosition(1, pos);
-            
-            if (value.Item1)
-                ShootAction(value.Item2);
-            else
-                Pass();
+
+            ShootAction(value.Item1);
 
             gameManagerProxy.AddCommandPlaylist(commandPlayList);
         }
@@ -34,6 +31,12 @@ namespace Assets.Script.Pawns.Enemy
         {
             ICommand command = new ShootCommand(node);
             commandPlayList.AddCommand(command);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(transform.position, transform.forward);
         }
     }
 }

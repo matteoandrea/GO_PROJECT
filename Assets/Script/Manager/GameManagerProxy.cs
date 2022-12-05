@@ -12,9 +12,11 @@ namespace Assets.Script.Manager
 
         public event UnityAction startPlayerTurnEvent;
         public event UnityAction startEnemyTurnEvent;
+        public event UnityAction FinishEnemyTurnEvent;
 
         public void OnStartPlayerTurn() => startPlayerTurnEvent?.Invoke();
         public void OnStartEnemyTurn() => startEnemyTurnEvent?.Invoke();
+        public void OnFinishEnemyTurn() => FinishEnemyTurnEvent?.Invoke();
 
         public void AddEnemy(Pawn enemy) => GameManager.AddEnemy(enemy);
         public void RemoveEnemy(Pawn enemy) => GameManager.RemoveEnemy(enemy);

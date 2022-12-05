@@ -11,6 +11,8 @@
             else
                 Rotate();
 
+            VerifyRotate();
+
             gameManagerProxy.AddCommandPlaylist(commandPlayList);
         }
     }
